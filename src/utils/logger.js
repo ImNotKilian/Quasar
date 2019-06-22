@@ -26,7 +26,7 @@ module.exports = class Logger {
    * @returns {Console}
    */
   static log(type, message) {
-    let toLog = colorize(`[${type}]`).bgBlack + ' > '
+    let toLog = colorize(`[${process.argv[2]}@${type}]`).bgBlack + ' > '
 
     switch (type) {
       case 'INFO': toLog = colorize(toLog).green; break

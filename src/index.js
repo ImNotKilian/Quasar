@@ -2,19 +2,14 @@
 
 /**
  * Validate the server type
- * @param {String} type
  * @throws {Error}
  */
-const validateType = (type) => {
-  if (!type) {
-    throw new Error('Missing server type.')
-  }
+const validateType = () => {
+  if (!process.argv[2]) throw new Error('Missing server type.')
 
-  type = type.toUpperCase()
+  const type = process.argv[2].toUpperCase()
 
-  if (type !== 'LOGIN' && type !== 'WORLD') {
-    throw new Error('Invalid server type.')
-  }
+  if (type !== 'LOGIN' && type !== 'WORLD') throw new Error('Invalid server type.')
 }
 
 /**
@@ -22,29 +17,21 @@ const validateType = (type) => {
  * @throws {Error}
  */
 const validateServerConfig = () => {
-  if (!config.LOGIN || !config.WORLD) {
-    const type = !config.LOGIN ? 'login' : 'world'
+  if (!config.LOGIN) throw new Error('Missing login config.')
+  if (!config.WORLD) throw new Error('Missing world config.')
 
-    throw new Error(`Missing config for ${type}.`)
-  }
+  if (!config.LOGIN.HOST) throw new Error('Missing host for login.')
+  if (!config.LOGIN.PORT) throw new Error('Missing port for login.')
+  if (!config.WORLD.HOST) throw new Error('Missing host for world.')
+  if (!config.WORLD.PORT) throw new Error('Missing port for world.')
 
-  const mustHaveProps = ['HOST', 'PORT']
+  if (isNaN(config.LOGIN.PORT)) throw new Error('Invalid port for login.')
+  if (isNaN(config.WORLD.PORT)) throw new Error('Invalid port for world.')
 
-  for (let i = 0; i < mustHaveProps.length; i++) {
-    const mustHaveProp = mustHaveProps[i]
+  if (config.LOGIN.PORT <= 1023) throw new Error('Invalid port range for login.')
+  if (config.WORLD.PORT <= 1023) throw new Error('Invalid port range for world.')
 
-    if (isNaN(config.LOGIN.PORT) || isNaN(config.WORLD.PORT)) {
-      const type = isNaN(config.LOGIN.PORT) ? 'login' : 'world'
-
-      throw new Error(`The config property port must be a number for ${type}.`)
-    }
-
-    if (!config.LOGIN[mustHaveProp] || !config.WORLD[mustHaveProp]) {
-      const type = config.LOGIN[mustHaveProp] ? 'login' : 'world'
-
-      throw new Error(`Missing config property ${mustHaveProp} for ${type}.`)
-    }
-  }
+  if (config.LOGIN.PORT === config.WORLD.PORT) throw new Error('Invalid port duplication.')
 }
 
 /**
@@ -52,31 +39,20 @@ const validateServerConfig = () => {
  * @throws {Error}
  */
 const validateDatabaseConfig = () => {
-  if (!config.DATABASE) {
-    throw new Error('Missing database config.')
-  }
+  if (!config.DATABASE) throw new Error('Missing database config.')
 
-  const db = config.DATABASE
-  const mustHaveProps = ['host', 'user', 'password', 'database']
-
-  for (let i = 0; i < mustHaveProps.length; i++) {
-    const mustHaveProp = mustHaveProps[i]
-
-    if (!db.hasOwnProperty(mustHaveProp)) {
-      throw new Error(`Missing database config property ${mustHaveProp}.`)
-    }
-  }
-
-  if (db.password === '') {
-    logger.info('Quasar has detected an empty database password.')
-  }
+  if (!config.DATABASE.host) throw new Error('Missing host for database.')
+  if (!config.DATABASE.user) throw new Error('Missing user for database.')
+  if (!config.DATABASE.hasOwnProperty('password')) throw new Error('Missing password for database.')
+  if (!config.DATABASE.database) throw new Error('Missing database name for database.')
 }
 
 try {
+  global.utils = require('./utils/')
   global.logger = require('./utils/logger')
   global.config = require('../config/')
 
-  validateType(process.argv[2])
+  validateType()
   validateServerConfig()
   validateDatabaseConfig()
 } catch (err) {
@@ -84,4 +60,25 @@ try {
   process.exit(1)
 } finally {
   process.title = `Quasar@${process.argv[2].toUpperCase()}`
+
+  const { freemem, totalmem, cpus } = require('os')
+  const { isMaster, fork } = require('cluster')
+
+  const free = utils.bytesToGB(freemem())
+  const total = utils.bytesToGB(totalmem())
+  const threads = cpus().length
+
+  if (isMaster) {
+    for (let i = 0; i < threads; i++) {
+      fork().send({ doLog: i === 0 })
+    }
+  } else {
+    process.on('message', (message) => {
+      if (message.doLog) {
+        logger.info(`Quasar running on Node ${process.version} using ${threads} threads with ${free} out of ${total} available.`)
+
+        new (require('./server'))
+      }
+    })
+  }
 }
