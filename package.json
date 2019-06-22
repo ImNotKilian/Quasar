@@ -1,0 +1,10 @@
+{
+  "name": "quasar",
+  "version": "1.0.0",
+  "description": "A new experimental AS2 Club Penguin emulator",
+  "scripts": {
+    "start": "node ./src/"
+  },
+  "author": "Zaseth",
+  "license": "MIT"
+}
