@@ -21,8 +21,8 @@ module.exports = class Logger {
   /**
    * Logs a message
    * @param {String} type
-   * @param {String} color
    * @param {String} message
+   * @throws {TypeError}
    * @returns {Console}
    */
   static log(type, message) {
