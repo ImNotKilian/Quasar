@@ -37,10 +37,10 @@ module.exports = class Penguin {
 
   /**
    * Send xt data to the socket
-   * @param {Array} arguments
+   * @param {Array} args
    */
-  sendXt(...arguments) {
-    this.send(`%xt%${arguments.join('%')}%`)
+  sendXt(...args) {
+    this.send(`%xt%${args.join('%')}%`)
   }
 
   /**

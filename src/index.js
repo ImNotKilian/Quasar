@@ -57,7 +57,6 @@ const validateDatabaseConfig = () => {
 }
 
 try {
-  global.utils = require('./utils/')
   global.logger = require('./utils/logger')
   global.config = require('../config/')
 
@@ -70,12 +69,8 @@ try {
 } finally {
   process.title = `Quasar@${process.argv[2].toUpperCase()}`
 
-  const { freemem, totalmem, cpus } = require('os')
+  const threads = require('os').cpus().length
   const { isMaster, fork } = require('cluster')
-
-  const free = utils.bytesToGB(freemem())
-  const total = utils.bytesToGB(totalmem())
-  const threads = cpus().length
 
   if (isMaster) {
     for (let i = 0; i < threads; i++) {
@@ -84,8 +79,6 @@ try {
   } else {
     process.on('message', (message) => {
       if (message.doLog) {
-        logger.info(`Quasar running on Node ${process.version} using ${threads} threads with ${free} out of ${total} available`)
-
         new (require('./server'))
       }
     })
