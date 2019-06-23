@@ -1,5 +1,6 @@
 'use strict'
 
+const { isIP, createServer } = require('net')
 const Penguin = require('./penguin')
 
 /**
@@ -27,9 +28,17 @@ module.exports = class Server {
      */
     this.config = config[this.type]
     /**
+     * The network class
+     * @type {Network}
+     */
+    this.network = require('./system/network')
+    /**
      * Start a new server
      */
-    this.startServer()
+    this.network.loadHandlers((len) => {
+      logger.info(`Quasar finished loading ${len} handlers`)
+      this.startServer()
+    })
   }
 
   /**
@@ -38,7 +47,12 @@ module.exports = class Server {
   startServer() {
     const { HOST, PORT, MAX } = this.config
 
-    require('net').createServer((socket) => {
+    if (isIP(HOST) !== 4) {
+      logger.error('Quasar has detected an invalid host config and will now be killed')
+      process.kill(process.pid)
+    }
+
+    createServer((socket) => {
       socket.setTimeout(600000)
       socket.setEncoding('utf8')
 
@@ -54,6 +68,12 @@ module.exports = class Server {
 
       socket.on('data', (data) => {
         data = data.toString().slice(0, -1)
+
+        if (data === '<policy-file-request/>') {
+          return penguin.send(`<cross-domain-policy><allow-access-from domain='*' to-ports='*' /></cross-domain-policy>`)
+        } else {
+          // Todo
+        }
       })
       socket.on('timeout', () => penguin.sendError(2, true))
       socket.on('close', () => penguin.disconnect())
