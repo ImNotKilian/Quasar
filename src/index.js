@@ -57,18 +57,19 @@ const validateDatabaseConfig = () => {
 }
 
 try {
+  validateType()
+
   global.serverType = process.argv[2].toUpperCase()
   global.logger = require('./utils/logger')
   global.config = require('../config/')
 
-  validateType()
   validateServerConfig()
   validateDatabaseConfig()
 } catch (err) {
   logger.error(`An error has occurred whilst starting Quasar: ${err.message}`)
   process.exit(1)
 } finally {
-  process.title = `Quasar@${process.argv[2].toUpperCase()}`
+  process.title = `Quasar@${serverType}`
 
   const threads = require('os').cpus().length
   const { isMaster, fork } = require('cluster')
