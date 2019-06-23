@@ -57,6 +57,7 @@ const validateDatabaseConfig = () => {
 }
 
 try {
+  global.serverType = process.argv[2].toUpperCase()
   global.logger = require('./utils/logger')
   global.config = require('../config/')
 

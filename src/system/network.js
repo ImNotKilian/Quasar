@@ -10,13 +10,21 @@ const classHandlers = {}
  * Xt packets
  * @constant
  */
-const xtHandlers = {}
+const xtHandlers = {
+  's': {
+    'j#js': { 'klass': 'navigation', 'func': 'handleJoinServer' }
+  }
+}
 
 /**
  * Xml packets
  * @constant
  */
-const xmlHandlers = {}
+const xmlHandlers = {
+  'verChk': 'handleVersionCheck',
+  'rndK': 'handleRandomKey',
+  'login': 'handleLogin'
+}
 
 /**
  * @exports
@@ -25,14 +33,14 @@ const xmlHandlers = {}
  */
 module.exports = class Network {
   /**
-   * Load the handlers
+   * Loads the handlers
    * @param {Function} callback
    */
   static async loadHandlers(callback) {
     const dir = `${process.cwd()}\\src\\handlers\\`
 
     try {
-      if (process.argv[2].toUpperCase() === 'LOGIN') {
+      if (serverType === 'LOGIN') {
         classHandlers['xml'] = require(`${dir}xml.js`)
       } else {
         const readdirAsync = require('util').promisify(require('fs').readdir)
@@ -47,6 +55,71 @@ module.exports = class Network {
       process.kill(process.pid)
     } finally {
       callback(Object.keys(classHandlers).length)
+    }
+  }
+
+  /**
+   * Parses incoming data
+   * @param {String} data
+   * @param {Function} callback
+   */
+  static parseData(data, callback) {
+    const firstChar = data.charAt(0)
+    const lastChar = data.charAt(data.length - 1)
+
+    if (firstChar === '<' && lastChar === '>') {
+      const action = data.split(`='`)[2].split(`'`)[0]
+
+      callback(['xml', action, data])
+    } else if (firstChar === '%' && lastChar === '%' && serverType === 'WORLD') {
+      const xt = data.split('%')
+
+      xt.shift() // Remove first %
+      xt.pop() // Remove last %
+      xt.shift() // Remove xt
+
+      const type = xt.shift()
+      const handler = xt.shift()
+
+      xt.shift() // Remove -1
+
+      callback(['xt', type, handler, xt])
+    } else {
+      penguin.disconnect()
+    }
+  }
+
+  /**
+   * Handles parsed data
+   * @param {Array} parsed
+   * @param {Penguin} penguin
+   */
+  static handleData(parsed, penguin) {
+    const dataType = parsed.shift()
+
+    if (dataType === 'xml') {
+      const [action, data] = parsed
+
+      if (!xmlHandlers[action]) {
+        return logger.error(`Unknown xml data: ${data}`)
+      } else {
+        logger.incoming(data)
+
+        classHandlers['xml'][xmlHandlers[action]](data, penguin)
+      }
+    } else {
+      const [type, handler, xt] = parsed
+      const data = `${type}%${handler}%${xt.join('%')}`
+
+      if (!xtHandlers[type][handler]) {
+        return logger.error(`Unknown xt data: ${data}`)
+      } else {
+        logger.incoming(data)
+
+        const { klass, func } = xtHandlers[type][handler]
+
+        classHandlers[klass][func](xt, penguin)
+      }
     }
   }
 }

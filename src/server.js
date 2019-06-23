@@ -18,15 +18,10 @@ module.exports = class Server {
      */
     this.penguins = []
     /**
-     * The server type
-     * @type {String}
-     */
-    this.type = process.argv[2].toUpperCase()
-    /**
      * The config for the current server
      * @type {Object}
      */
-    this.config = config[this.type]
+    this.config = config[serverType]
     /**
      * The network class
      * @type {Network}
@@ -72,7 +67,7 @@ module.exports = class Server {
         if (data === '<policy-file-request/>') {
           return penguin.send(`<cross-domain-policy><allow-access-from domain='*' to-ports='*' /></cross-domain-policy>`)
         } else {
-          // Todo
+          this.network.parseData(data, (parsed) => this.network.handleData(parsed, penguin))
         }
       })
       socket.on('timeout', () => penguin.sendError(2, true))

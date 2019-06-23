@@ -21,6 +21,11 @@ module.exports = class Penguin {
      * @type {Socket}
      */
     this.socket = socket
+    /**
+     * The xml stage
+     * @type {Number}
+     */
+    this.stage = 0
   }
 
   /**
