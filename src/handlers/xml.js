@@ -76,6 +76,12 @@ module.exports = {
         return penguin.disconnect()
       }
 
+      const penguinObj = penguin.server.getPenguinById(result.id)
+
+      if (penguinObj) {
+        penguinObj.disconnect()
+      }
+
       let hash = await createHash('md5').update(result.loginkey + config.KEY).digest('hex')
       hash = hash.substring(16) + hash.substring(0, 16) + result.loginkey
 

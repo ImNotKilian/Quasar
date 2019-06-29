@@ -92,4 +92,19 @@ module.exports = class Server {
       logger.info('A penguino disconnected')
     }
   }
+
+  /**
+   * Retrieves a penguin by their id
+   * @param {Number} id
+   * @returns {Object}
+   */
+  getPenguinById(id) {
+    for (let i = 0; i < this.penguins.length; i++) {
+      const penguin = this.penguins[i]
+
+      if (penguin.id && penguin.id === parseInt(id)) {
+        return penguin
+      }
+    }
+  }
 }
