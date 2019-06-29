@@ -17,6 +17,8 @@ const validateType = () => {
  * @throws {Error}
  */
 const validateServerConfig = () => {
+  if (!config.KEY) throw new Error('Missing server key')
+
   if (!config.LOGIN) throw new Error('Missing login config')
   if (!config.WORLD) throw new Error('Missing world config')
 

@@ -2,6 +2,7 @@
 
 const { isIP, createServer } = require('net')
 const Penguin = require('./penguin')
+const network = require('./system/network')
 
 /**
  * @exports
@@ -23,14 +24,21 @@ module.exports = class Server {
      */
     this.config = config[serverType]
     /**
-     * The network class
-     * @type {Network}
+     * The database class
+     * @type {Database}
      */
-    this.network = require('./system/network')
+    this.database = new (require('./system/database'))
+    /**
+     * The room manager class
+     * @type {RoomManager}
+     */
+    if (serverType !== 'LOGIN') {
+      this.roomManager = new (require('./managers/room'))
+    }
     /**
      * Start a new server
      */
-    this.network.loadHandlers((len) => {
+    network.loadHandlers((len) => {
       logger.info(`Quasar finished loading ${len} handlers`)
       this.startServer()
     })
@@ -43,7 +51,7 @@ module.exports = class Server {
     const { HOST, PORT, MAX } = this.config
 
     if (isIP(HOST) !== 4) {
-      logger.error('Quasar has detected an invalid host config and will now be killed')
+      logger.error('Quasar has detected an invalid host and will now be killed')
       process.kill(process.pid)
     }
 
@@ -61,15 +69,7 @@ module.exports = class Server {
       this.penguins.push(penguin)
       logger.info('A penguino connected')
 
-      socket.on('data', (data) => {
-        data = data.toString().slice(0, -1)
-
-        if (data === '<policy-file-request/>') {
-          return penguin.send(`<cross-domain-policy><allow-access-from domain='*' to-ports='*' /></cross-domain-policy>`)
-        } else {
-          this.network.parseData(data, (parsed) => this.network.handleData(parsed, penguin))
-        }
-      })
+      socket.on('data', (data) => network.handleData(data, penguin))
       socket.on('timeout', () => penguin.sendError(2, true))
       socket.on('close', () => penguin.disconnect())
       socket.on('error', () => penguin.disconnect())

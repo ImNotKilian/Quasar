@@ -12,7 +12,28 @@ const classHandlers = {}
  */
 const xtHandlers = {
   's': {
-    'j#js': { 'klass': 'navigation', 'func': 'handleJoinServer' }
+    'j#js': { klass: 'navigation', func: 'handleJoinServer' },
+    'j#jr': { klass: 'navigation', func: 'handleJoinRoom' },
+    'j#jp': { klass: 'navigation', func: 'handleJoinPlayer' },
+
+    'u#h': { klass: 'penguin', func: 'handleHeartBeat' },
+    'u#sp': { klass: 'penguin', func: 'handleSendPosition' },
+    'u#sb': { klass: 'penguin', func: 'handleSendSnowball' },
+    'u#se': { klass: 'penguin', func: 'handleSendEmote' },
+    'u#sf': { klass: 'penguin', func: 'handleSendFrame' },
+    'u#ss': { klass: 'penguin', func: 'handleSendSafeMessage' },
+    'u#sa': { klass: 'penguin', func: 'handleSendAction' },
+    'u#sg': { klass: 'penguin', func: 'handleSendGuide' },
+    'u#sj': { klass: 'penguin', func: 'handleSendJoke' },
+    'u#sma': { klass: 'penguin', func: 'handleSendMascotMessage' },
+    'u#sl': { klass: 'penguin', func: 'handleSendLine' },
+    'u#sq': { klass: 'penguin', func: 'handleSendQuickMessage' },
+    'u#glr': { klass: 'penguin', func: 'handleGetLatestRevision' },
+
+    'm#sm': { klass: 'penguin', func: 'handleSendMessage' },
+
+    't#at': { klass: 'toy', func: 'handleAddToy' },
+    't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   }
 }
 
@@ -21,9 +42,9 @@ const xtHandlers = {
  * @constant
  */
 const xmlHandlers = {
-  'verChk': 'handleVersionCheck',
-  'rndK': 'handleRandomKey',
-  'login': 'handleLogin'
+  verChk: 'handleVersionCheck',
+  rndK: 'handleRandomKey',
+  login: 'handleLogin'
 }
 
 /**
@@ -51,7 +72,7 @@ module.exports = class Network {
         }
       }
     } catch (err) {
-      logger.error(`An error has occurred whilst reading handlers: ${err.message}`)
+      logger.error(`An error has occurred whilst reading the handlers: ${err.message}`)
       process.kill(process.pid)
     } finally {
       callback(Object.keys(classHandlers).length)
@@ -59,67 +80,65 @@ module.exports = class Network {
   }
 
   /**
-   * Parses incoming data
+   * Handles incoming data
    * @param {String} data
-   * @param {Function} callback
+   * @param {Penguin} penguin
    */
-  static parseData(data, callback) {
+  static handleData(data, penguin) {
+    data = data.toString().slice(0, -1)
+
     const firstChar = data.charAt(0)
     const lastChar = data.charAt(data.length - 1)
 
     if (firstChar === '<' && lastChar === '>') {
-      const action = data.split(`='`)[2].split(`'`)[0]
+      if (data === '<policy-file-request/>') {
+        return penguin.send(`<cross-domain-policy><allow-access-from domain='*' to-ports='*' /></cross-domain-policy>`)
+      }
 
-      callback(['xml', action, data])
+      let action
+
+      try {
+        action = data.split(`='`)[2].split(`'`)[0]
+      } catch (err) {
+        penguin.disconnect()
+      } finally {
+        if (!xmlHandlers[action]) {
+          logger.error(`Unknown xml data: ${data}`)
+        } else {
+          logger.incoming(data)
+
+          classHandlers['xml'][xmlHandlers[action]](data, penguin)
+        }
+      }
     } else if (firstChar === '%' && lastChar === '%' && serverType === 'WORLD') {
-      const xt = data.split('%')
+      let xt, type, handler
 
-      xt.shift() // Remove first %
-      xt.pop() // Remove last %
-      xt.shift() // Remove xt
+      try {
+        xt = data.split('%')
 
-      const type = xt.shift()
-      const handler = xt.shift()
+        if (xt.shift() === '' && xt.pop() === '' && xt.shift() === 'xt') {
+          type = xt.shift()
+          handler = xt.shift()
 
-      xt.shift() // Remove -1
+          xt.shift()
+        } else {
+          throw new Error('Incorrect data')
+        }
+      } catch (err) {
+        penguin.disconnect()
+      } finally {
+        if (!xtHandlers[type][handler]) {
+          logger.error(`Unknown xt data: ${data}`)
+        } else {
+          logger.incoming(data)
 
-      callback(['xt', type, handler, xt])
+          const { klass, func } = xtHandlers[type][handler]
+
+          classHandlers[klass][func](xt, penguin)
+        }
+      }
     } else {
       penguin.disconnect()
-    }
-  }
-
-  /**
-   * Handles parsed data
-   * @param {Array} parsed
-   * @param {Penguin} penguin
-   */
-  static handleData(parsed, penguin) {
-    const dataType = parsed.shift()
-
-    if (dataType === 'xml') {
-      const [action, data] = parsed
-
-      if (!xmlHandlers[action]) {
-        return logger.error(`Unknown xml data: ${data}`)
-      } else {
-        logger.incoming(data)
-
-        classHandlers['xml'][xmlHandlers[action]](data, penguin)
-      }
-    } else {
-      const [type, handler, xt] = parsed
-      const data = `${type}%${handler}%${xt.join('%')}`
-
-      if (!xtHandlers[type][handler]) {
-        return logger.error(`Unknown xt data: ${data}`)
-      } else {
-        logger.incoming(data)
-
-        const { klass, func } = xtHandlers[type][handler]
-
-        classHandlers[klass][func](xt, penguin)
-      }
     }
   }
 }

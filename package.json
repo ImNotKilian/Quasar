@@ -6,5 +6,10 @@
     "start": "node ./src/"
   },
   "author": "Zaseth",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "knex": "^0.17.6",
+    "mysql2": "^1.6.5"
+  }
 }
