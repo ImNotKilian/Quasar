@@ -72,6 +72,10 @@ module.exports = {
     const room = penguin.getRoomById(roomId)
 
     if (room) {
+      if (penguin.isRoomFull(roomId)) {
+        return penguin.sendError(210)
+      }
+
       penguin.joinRoom(room, data[1], data[2])
     } else {
       penguin.sendError(210)
