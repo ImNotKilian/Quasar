@@ -89,7 +89,7 @@ module.exports = {
         return penguin.sendError(101, true)
       }
 
-      penguin.setPenguin(result)
+      await penguin.setPenguin(result)
       penguin.sendXt('l', 'Zaseth')
     }
   }
