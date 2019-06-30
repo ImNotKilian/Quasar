@@ -32,7 +32,7 @@ module.exports = class Penguin {
    * Set the penguin
    * @param {Object} result
    */
-  setPenguin(result) {
+  async setPenguin(result) {
     const date = new Date().toISOString().split('T')[0].split('-').join('')
 
     delete result.password
