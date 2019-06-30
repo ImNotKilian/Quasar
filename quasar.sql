@@ -1,5 +1,6 @@
 DROP DATABASE IF EXISTS `quasar`;
 CREATE DATABASE `quasar`;
+
 DROP TABLE IF EXISTS `penguins`;
 CREATE TABLE `penguins` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -26,3 +27,20 @@ CREATE TABLE `penguins` (
 LOCK TABLES `penguins` WRITE;
 INSERT INTO `penguins` (`id`, `username`, `password`) VALUES (100, 'Zaseth', '$2y$12$q9nZjKizopPUkUJTI.apsOuj9q0QQ8ewhTjtOSaMMHElnPSt/CAPu');
 UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `inventory`;
+CREATE TABLE `inventory` (
+    `id` INT(10) UNSIGNED NOT NULL,
+    `itemId` INT(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `inventory` WRITE;
+INSERT INTO `inventory` VALUES (100, 1);
+UNLOCK TABLES;
+
+ALTER TABLE `inventory` ADD UNIQUE( `id`, `itemId`);
+
+CREATE TRIGGER `insert_color`
+  BEFORE INSERT ON `penguins`
+  FOR EACH ROW
+  INSERT INTO `inventory` (`id`, `itemId`) VALUES (NEW.id, NEW.color);
