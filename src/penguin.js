@@ -49,6 +49,52 @@ module.exports = class Penguin {
 
     this.x = this.y = 0
     this.frame = 1
+
+    this.inventory = await this.server.database.knex('inventory').pluck('itemId').where('id', this.id)
+  }
+
+  /**
+   * Update the penguin's outfit
+   * @param {String} itemType
+   * @param {Number} itemId
+   */
+  async updateOutfit(itemType, itemId) {
+    this[itemType] = itemId
+    await this.updateColumn(this.id, itemType, itemId)
+  }
+
+  /**
+   * Remove coins
+   * @param {Number} amount
+   */
+  async removeCoins(amount) {
+    this.coins -= amount
+    await this.updateColumn(this.id, 'coins', this.coins)
+  }
+
+  /**
+   * Add coins
+   * @param {Number} amount
+   */
+  async addCoins(amount) {
+    this.coins += amount
+    await this.updateColumn(this.id, 'coins', this.coins)
+  }
+
+  /**
+  * Add an item
+  * @param {Number} itemId
+  */
+  async addItem(itemId) {
+    if (this.inventory.indexOf(itemId) === -1) {
+      this.inventory.push(itemId)
+
+      await this.server.database.knex('inventory').insert({ id: this.id, itemId })
+
+      this.sendXt('ai', itemId, this.coins)
+    } else {
+      this.sendError(400)
+    }
   }
 
   /**

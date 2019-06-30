@@ -32,6 +32,19 @@ const xtHandlers = {
 
     'm#sm': { klass: 'penguin', func: 'handleSendMessage' },
 
+    'i#gi': { klass: 'inventory', func: 'handleGetInventory' },
+    'u#gp': { klass: 'inventory', func: 'handleGetPenguin' },
+    's#upc': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#uph': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upf': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upn': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upb': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upa': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upe': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upl': { klass: 'inventory', func: 'handleUpdateClothing' },
+    's#upp': { klass: 'inventory', func: 'handleUpdateClothing' },
+    'i#ai': { klass: 'inventory', func: 'handleAddItem' },
+
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   }
@@ -133,6 +146,10 @@ module.exports = class Network {
           logger.incoming(data)
 
           const { klass, func } = xtHandlers[type][handler]
+
+          if (func.toString() === 'handleUpdateClothing') {
+            xt.push(handler.split('#')[1])
+          }
 
           classHandlers[klass][func](xt, penguin)
         }
