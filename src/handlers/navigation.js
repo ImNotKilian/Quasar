@@ -19,7 +19,7 @@ module.exports = {
 
     const time = Date.now() / 1000 | 0 * 1000
 
-    penguin.sendXt('lp', penguin.buildString(), penguin.coins, 0, 1440, time, penguin.age, 0, 0, '', 7)
+    penguin.sendXt('lp', penguin.buildString(), penguin.coins, 0, 1440, time, penguin.age, 0, 1, '', 7)
     penguin.inWorld = true
     penguin.joinRandomRoom()
   },
