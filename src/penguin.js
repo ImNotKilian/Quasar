@@ -51,6 +51,10 @@ module.exports = class Penguin {
     this.frame = 1
 
     this.inventory = await this.server.database.knex('inventory').pluck('itemId').where('id', this.id)
+    this.ignored = await this.server.database.knex('ignore').select('ignoreId', 'ignoreUsername').where('id', this.id)
+
+    // Stuff to convert to an object when needed
+    this.ignored = this.ignored.reduce((o, i) => (o[i.ignoreId] = i.ignoreUsername, o), {})
   }
 
   /**
