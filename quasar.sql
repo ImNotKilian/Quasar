@@ -42,6 +42,19 @@ INSERT INTO `inventory` VALUES (100, 1);
 INSERT INTO `inventory` VALUES (101, 1);
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `ignore`;
+CREATE TABLE `ignore` (
+    `id` INT(10) UNSIGNED NOT NULL,
+    `ignoreId` INT(10) UNSIGNED NOT NULL,
+    `ignoreUsername` VARCHAR(12) NOT NULL,
+    PRIMARY KEY (`id`, `ignoreId`),
+    CONSTRAINT `ignore_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `ignore` WRITE;
+INSERT INTO `ignore` VALUES (100, 101, 'Test');
+UNLOCK TABLES;
+
 CREATE TRIGGER `insert_color`
   AFTER INSERT ON `penguins`
   FOR EACH ROW
