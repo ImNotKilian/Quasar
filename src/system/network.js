@@ -33,6 +33,8 @@ const xtHandlers = {
     'm#sm': { klass: 'penguin', func: 'handleSendMessage' },
 
     'i#gi': { klass: 'inventory', func: 'handleGetInventory' },
+    'i#ai': { klass: 'inventory', func: 'handleAddItem' },
+
     'u#gp': { klass: 'inventory', func: 'handleGetPenguin' },
     's#upc': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#uph': { klass: 'inventory', func: 'handleUpdateClothing' },
@@ -43,7 +45,10 @@ const xtHandlers = {
     's#upe': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#upl': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#upp': { klass: 'inventory', func: 'handleUpdateClothing' },
-    'i#ai': { klass: 'inventory', func: 'handleAddItem' },
+
+    'n#gn': { klass: 'ignore', func: 'handleGetIgnored' },
+    'n#an': { klass: 'ignore', func: 'handleAddIgnore' },
+    'n#rn': { klass: 'ignore', func: 'handleRemoveIgnore' },
 
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
