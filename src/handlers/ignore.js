@@ -34,10 +34,7 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    const ignoreId = parseInt(data[0])
-
-    await penguin.addIgnore(ignoreId)
-    penguin.sendXt('an', ignoreId)
+    await penguin.addIgnore(parseInt(data[0]))
   },
   /**
    * Remove an ignore
@@ -49,9 +46,6 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    const ignoreId = parseInt(data[0])
-
-    await penguin.removeIgnore(ignoreId)
-    penguin.sendXt('rn', ignoreId)
+    await penguin.removeIgnore(parseInt(data[0]))
   }
 }
