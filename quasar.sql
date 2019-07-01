@@ -26,6 +26,7 @@ CREATE TABLE `penguins` (
 
 LOCK TABLES `penguins` WRITE;
 INSERT INTO `penguins` (`id`, `username`, `password`) VALUES (100, 'Zaseth', '$2y$12$q9nZjKizopPUkUJTI.apsOuj9q0QQ8ewhTjtOSaMMHElnPSt/CAPu');
+INSERT INTO `penguins` (`id`, `username`, `password`) VALUES (101, 'Test', '$2y$12$TBw5mtVoU.YBnmAepDPzDeA7MZT5CshLYq9cz8B6l1a3/YPnAHnlS');
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `inventory`;
@@ -36,6 +37,7 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 INSERT INTO `inventory` VALUES (100, 1);
+INSERT INTO `inventory` VALUES (101, 1);
 UNLOCK TABLES;
 
 ALTER TABLE `inventory` ADD UNIQUE( `id`, `itemId`);
