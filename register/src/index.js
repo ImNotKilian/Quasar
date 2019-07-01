@@ -1,12 +1,9 @@
 'use strict'
 
-const config = require('../../config/')
-
-const knex = require('knex')({ client: 'mysql2', connection: config.DATABASE })
-
+const { DATABASE, KEY, REGISTER } = require('../../config/')
+const knex = require('knex')({ client: 'mysql2', connection: DATABASE })
 const { hash } = require('bcryptjs')
 const { createHash } = require('crypto')
-
 const app = require('fastify')()
 
 /**
@@ -18,7 +15,7 @@ const hashPassword = async (password) => {
   password = await createHash('md5').update(password).digest('hex').toUpperCase()
   password = password.substring(16) + password.substring(0, 16)
 
-  password += config.KEY
+  password += KEY
   password += 'Y(02.>\'H}t":E1'
 
   password = await createHash('md5').update(password).digest('hex')
@@ -28,11 +25,6 @@ const hashPassword = async (password) => {
   password = password.replace('$2a$12$', '$2y$12$')
 
   return password
-}
-
-const registerMiddleware = async () => {
-  await app.register(require('fastify-static'), { root: require('path').join(__dirname, 'public') })
-  await app.register(require('fastify-formbody'))
 }
 
 app.post('/registerPost', async (req, res) => {
@@ -63,8 +55,22 @@ app.post('/registerPost', async (req, res) => {
 
 const start = async () => {
   try {
-    await registerMiddleware()
-    await app.listen(config.REGISTER.PORT, config.REGISTER.HOST)
+    if (!KEY) throw new Error('Missing server key')
+
+    if (!DATABASE) throw new Error('Missing database config')
+    if (!DATABASE.host) throw new Error('Missing host for database')
+    if (!DATABASE.user) throw new Error('Missing user for database')
+    if (!DATABASE.hasOwnProperty('password')) throw new Error('Missing password for database')
+    if (!DATABASE.database) throw new Error('Missing database name for database')
+
+    if (!REGISTER) throw new Error('Missing register config')
+    if (!REGISTER.HOST) throw new Error('Missing host for register')
+    if (!REGISTER.PORT) throw new Error('Missing port for register')
+
+    await app.register(require('fastify-static'), { root: require('path').join(__dirname, 'public') })
+    await app.register(require('fastify-formbody'))
+
+    await app.listen(REGISTER.PORT, REGISTER.HOST)
 
     process.title = 'Quasar@REGISTER'
     console.log('Quasar register listening')
