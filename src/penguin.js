@@ -105,7 +105,7 @@ module.exports = class Penguin {
     return [
       this.id,
       this.username,
-      1,
+      1, // Is approved
       this.color,
       this.head,
       this.face,
@@ -118,8 +118,8 @@ module.exports = class Penguin {
       this.x,
       this.y,
       this.frame,
-      1,
-      this.rank * 146
+      1, // Is member
+      this.rank * 146 // Membership badge
     ].join('|')
   }
 
