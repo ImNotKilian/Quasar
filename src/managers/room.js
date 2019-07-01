@@ -70,7 +70,7 @@ module.exports = class RoomManager {
    */
   closeIgloo(id) {
     if (this.rooms[id]) {
-      return (this.rooms[id].open = false)
+      this.rooms[id].open = false
     }
   }
 
