@@ -58,6 +58,36 @@ module.exports = class Penguin {
   }
 
   /**
+   * Add an ignore
+   * @param {Number} ignoreId
+   */
+  async addIgnore(ignoreId) {
+    if (!this.ignored[ignoreId]) {
+      const ignoreObj = this.server.getPenguinById(ignoreId)
+
+      if (ignoreObj && ignoreObj.username) {
+        const ignoreUsername = ignoreObj.username
+
+        this.ignored[ignoreId] = ignoreUsername
+
+        await this.server.database.knex('ignore').insert({ id: this.id, ignoreId, ignoreUsername })
+      }
+    }
+  }
+
+  /**
+   * Remove an ignore
+   * @param {Number} ignoreId
+   */
+  async removeIgnore(ignoreId) {
+    if (this.ignored[ignoreId]) {
+      delete this.ignored[ignoreId]
+
+      await this.server.database.knex('ignore').where('ignoreId', ignoreId).del()
+    }
+  }
+
+  /**
    * Update the penguin's outfit
    * @param {String} itemType
    * @param {Number} itemId
