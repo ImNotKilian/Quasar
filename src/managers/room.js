@@ -54,6 +54,7 @@ module.exports = class RoomManager {
   /**
    * Check if an igloo is open
    * @param {Number} id
+   * @returns {Boolean}
    */
   checkIgloo(id) {
     if (this.rooms[id]) {
