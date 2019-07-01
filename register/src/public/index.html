@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Register</title>
+</head>
+
+<body>
+  <form method="POST" action="/registerPost">
+    Username:<br><input type="text" name="username" pattern="^[A-Za-z0-9_]{4,12}$" minlength="4" maxlength="12"
+      required><br>
+    Password:<br><input type="password" name="password" minlength="4" maxlength="12" required><br>
+    Color: <select name="color">
+      <option value="1">Blue</option>
+      <option value="2">Green</option>
+      <option value="3">Pink</option>
+      <option value="4">Black</option>
+      <option value="5">Red</option>
+      <option value="6">Orange</option>
+      <option value="7">Yellow</option>
+      <option value="8">Dark Purple</option>
+      <option value="9">Brown</option>
+      <option value="10">Peach</option>
+      <option value="11">Dark Green</option>
+      <option value="12">Light Blue</option>
+      <option value="13">Lime Green</option>
+    </select><br>
+
+    <input type="submit" value="Register">
+  </form>
+</body>
+
+</html>

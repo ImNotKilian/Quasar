@@ -1,0 +1,18 @@
+{
+  "name": "quasar-register",
+  "version": "1.0.0",
+  "description": "A simple register for Quasar",
+  "scripts": {
+    "start": "node ./src/"
+  },
+  "author": "Zaseth",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "fastify": "^2.6.0",
+    "fastify-formbody": "^3.1.0",
+    "fastify-static": "^2.5.0",
+    "knex": "^0.18.1",
+    "mysql2": "^1.6.5"
+  }
+}
