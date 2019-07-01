@@ -40,9 +40,7 @@ INSERT INTO `inventory` VALUES (100, 1);
 INSERT INTO `inventory` VALUES (101, 1);
 UNLOCK TABLES;
 
-ALTER TABLE `inventory` ADD UNIQUE( `id`, `itemId`);
-
 CREATE TRIGGER `insert_color`
-  BEFORE INSERT ON `penguins`
+  AFTER INSERT ON `penguins`
   FOR EACH ROW
   INSERT INTO `inventory` (`id`, `itemId`) VALUES (NEW.id, NEW.color);
