@@ -32,7 +32,9 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `inventory`;
 CREATE TABLE `inventory` (
     `id` INT(10) UNSIGNED NOT NULL,
-    `itemId` INT(10) UNSIGNED NOT NULL
+    `itemId` INT(10) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`, `itemId`),
+    CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `inventory` WRITE;
