@@ -50,6 +50,7 @@ CREATE TABLE `ignore` (
     PRIMARY KEY (`id`, `ignoreId`),
     UNIQUE KEY `ignoreUsername` (`ignoreUsername`),
     CONSTRAINT `ignore_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `ignoreId` (`ignoreId`),
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `buddy`;
@@ -60,6 +61,7 @@ CREATE TABLE `buddy` (
     PRIMARY KEY (`id`, `buddyId`),
     UNIQUE KEY `buddyUsername` (`buddyUsername`),
     CONSTRAINT `buddy_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `buddyId` (`buddyId`),
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TRIGGER `insert_color`
