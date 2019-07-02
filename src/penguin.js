@@ -360,6 +360,17 @@ module.exports = class Penguin {
   disconnect() {
     if (serverType !== 'LOGIN') {
       this.removeFromRoom()
+
+      if (Object.keys(this.buddies).length > 0) {
+        for (const buddyId in this.buddies) {
+          const buddyObj = this.server.getPenguinById(buddyId)
+
+          if (buddyObj) {
+            buddyObj.sendXt('bof', this.id)
+          }
+        }
+      }
+
       this.closeIgloo()
     }
 
