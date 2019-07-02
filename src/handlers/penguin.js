@@ -167,8 +167,7 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    const id = parseInt(data[0])
-    const message = data[1]
+    const [id, message] = [parseInt(data[0]), data[1]]
 
     if (id !== penguin.id) {
       return penguin.disconnect()
