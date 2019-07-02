@@ -8,8 +8,6 @@ CREATE TABLE `penguins` (
     `password` CHAR(255) NOT NULL,
     `created` INT(8) NOT NULL DEFAULT DATE_FORMAT(CURDATE(), '%Y%m%d'),
     `loginkey` VARCHAR(30) NOT NULL DEFAULT '',
-    `moderator` BOOLEAN NOT NULL DEFAULT 0,
-    `muted` BOOLEAN NOT NULL DEFAULT 0,
     `moderator` BOOLEAN NOT NULL DEFAULT 0 CHECK (`moderator` BETWEEN 0 AND 1),
     `muted` BOOLEAN NOT NULL DEFAULT 0 CHECK (`muted` BETWEEN 0 AND 1),
     `color` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1,
