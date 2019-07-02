@@ -68,7 +68,7 @@ module.exports = class Penguin {
     if (!this.ignored[ignoreId]) {
       const ignoreObj = this.server.getPenguinById(ignoreId)
 
-      if (ignoreObj && ignoreObj.username) {
+      if (ignoreObj) {
         const ignoreUsername = ignoreObj.username
 
         this.ignored[ignoreId] = ignoreUsername
