@@ -63,6 +63,10 @@ module.exports = {
         return penguin.sendError(101, true)
       }
 
+      if (Boolean(result.ban)) {
+        return penguin.sendError(603, true)
+      }
+
       const loginkey = await randomBytes(15).toString('hex')
 
       const pop = penguin.server.penguins.length
@@ -87,6 +91,10 @@ module.exports = {
 
       if (password !== hash) {
         return penguin.sendError(101, true)
+      }
+
+      if (Boolean(result.ban)) {
+        return penguin.sendError(603, true)
       }
 
       await penguin.setPenguin(result)

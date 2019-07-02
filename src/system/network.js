@@ -57,6 +57,7 @@ const xtHandlers = {
 
     'o#m': { klass: 'moderation', func: 'handleMute' },
     'o#k': { klass: 'moderation', func: 'handleKick' },
+    'o#b': { klass: 'moderation', func: 'handleBan' },
 
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }

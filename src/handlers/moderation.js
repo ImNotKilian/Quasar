@@ -36,5 +36,24 @@ module.exports = {
     if (kickObj) {
       kickObj.sendError(5, true)
     }
+  },
+  /**
+   * Add a ban
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleBan: async (data, penguin) => {
+    if (data.length !== 2 || isNaN(data[0]) || !penguin.moderator) {
+      return penguin.disconnect()
+    }
+
+    const banObj = penguin.server.getPenguinById(parseInt(data[0]))
+
+    if (banObj) {
+      await banObj.updateColumn(banObj.id, 'ban', 1)
+
+      banObj.sendXt('e', 610, data[1])
+      banObj.disconnect()
+    }
   }
 }
