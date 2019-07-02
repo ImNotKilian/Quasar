@@ -107,4 +107,21 @@ module.exports = class Server {
       }
     }
   }
+
+  /**
+   * Retrieves whether a penguin is online or not
+   * @param {Number} id
+   * @returns {Boolean}
+   */
+  isPenguinOnline(id) {
+    for (let i = 0; i < this.penguins.length; i++) {
+      const penguin = this.penguins[i]
+
+      if (penguin.id && penguin.id === parseInt(id)) {
+        return true
+      }
+    }
+
+    return false
+  }
 }
