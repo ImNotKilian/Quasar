@@ -46,8 +46,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `ignore`;
 CREATE TABLE `ignore` (
     `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
-    `ignoreId` INT(10) UNSIGNED NOT NULL,
-    `ignoreUsername` VARCHAR(12) NOT NULL,
+    `ignoreId` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id to ignore',
+    `ignoreUsername` VARCHAR(12) NOT NULL COMMENT 'Penguin username to ignore',
     PRIMARY KEY (`id`, `ignoreId`, `ignoreUsername`),
     CONSTRAINT `ignore_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `ignore_ibfk_2` FOREIGN KEY (`IgnoreId`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -57,8 +57,8 @@ CREATE TABLE `ignore` (
 DROP TABLE IF EXISTS `buddy`;
 CREATE TABLE `buddy` (
     `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
-    `buddyId` INT(10) UNSIGNED NOT NULL,
-    `buddyUsername` VARCHAR(12) NOT NULL,
+    `buddyId` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id to buddy',
+    `buddyUsername` VARCHAR(12) NOT NULL COMMENT 'Penguin username to buddy',
     PRIMARY KEY (`id`, `buddyId`, `buddyUsername`),
     CONSTRAINT `buddy_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `buddy_ibfk_2` FOREIGN KEY (`buddyId`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
