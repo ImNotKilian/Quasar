@@ -29,14 +29,11 @@ const xtHandlers = {
     'u#sl': { klass: 'penguin', func: 'handleSendLine' },
     'u#sq': { klass: 'penguin', func: 'handleSendQuickMessage' },
     'u#glr': { klass: 'penguin', func: 'handleGetLatestRevision' },
-
     'm#sm': { klass: 'penguin', func: 'handleSendMessage' },
-
     'r#cdu': { klass: 'penguin', func: 'handleCoinDigUpdate' },
 
     'i#gi': { klass: 'inventory', func: 'handleGetInventory' },
     'i#ai': { klass: 'inventory', func: 'handleAddItem' },
-
     'u#gp': { klass: 'inventory', func: 'handleGetPenguin' },
     's#upc': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#uph': { klass: 'inventory', func: 'handleUpdateClothing' },
@@ -57,6 +54,9 @@ const xtHandlers = {
     'b#br': { klass: 'buddy', func: 'handleBuddyRequest' },
     'b#rb': { klass: 'buddy', func: 'handleBuddyRemove' },
     'b#bf': { klass: 'buddy', func: 'handleFindBuddy' },
+
+    'o#m': { klass: 'moderation', func: 'handleMute' },
+    'o#k': { klass: 'moderation', func: 'handleKick' },
 
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }

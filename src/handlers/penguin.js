@@ -181,7 +181,9 @@ module.exports = {
       return penguin.sendError(5, true)
     }
 
-    penguin.room.sendXt('sm', penguin.id, message)
+    if (!penguin.muted) {
+      penguin.room.sendXt('sm', penguin.id, message)
+    }
   },
   /**
    * Handle the coin digging action

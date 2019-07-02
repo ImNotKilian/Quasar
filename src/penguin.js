@@ -45,6 +45,7 @@ module.exports = class Penguin {
     delete this.created
 
     this.moderator = Boolean(this.moderator)
+    this.muted = Boolean(this.muted)
     this.age = Number(date - result.created)
 
     this.x = this.y = this.coinsDug = 0
