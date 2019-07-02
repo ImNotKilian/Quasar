@@ -76,6 +76,11 @@ module.exports = class Penguin {
         await this.server.database.knex('ignore').insert({ id: this.id, ignoreId, ignoreUsername })
       } else {
         const result = await this.server.database.knex('penguins').select('username').first('*').where({ id: ignoreId })
+
+        if (!result) {
+          return this.disconnect()
+        }
+
         const ignoreUsername = result[0].username
 
         this.ignored[ignoreId] = ignoreUsername
