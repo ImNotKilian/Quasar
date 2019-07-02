@@ -48,6 +48,7 @@ CREATE TABLE `ignore` (
     `ignoreId` INT(10) UNSIGNED NOT NULL,
     `ignoreUsername` VARCHAR(12) NOT NULL,
     PRIMARY KEY (`id`, `ignoreId`),
+    UNIQUE KEY `ignoreUsername` (`ignoreUsername`),
     CONSTRAINT `ignore_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
