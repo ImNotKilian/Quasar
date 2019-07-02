@@ -3,7 +3,7 @@ CREATE DATABASE `quasar`;
 
 DROP TABLE IF EXISTS `penguins`;
 CREATE TABLE `penguins` (
-    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Penguin id',
     `username` VARCHAR(12) NOT NULL,
     `password` CHAR(255) NOT NULL,
     `created` INT(8) NOT NULL DEFAULT DATE_FORMAT(CURDATE(), '%Y%m%d'),
@@ -31,7 +31,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `inventory`;
 CREATE TABLE `inventory` (
-    `id` INT(10) UNSIGNED NOT NULL,
+    `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
     `itemId` INT(10) UNSIGNED NOT NULL,
     PRIMARY KEY (`id`, `itemId`),
     CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -44,7 +44,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ignore`;
 CREATE TABLE `ignore` (
-    `id` INT(10) UNSIGNED NOT NULL,
+    `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
     `ignoreId` INT(10) UNSIGNED NOT NULL,
     `ignoreUsername` VARCHAR(12) NOT NULL,
     PRIMARY KEY (`id`, `ignoreId`),
@@ -54,7 +54,7 @@ CREATE TABLE `ignore` (
 
 DROP TABLE IF EXISTS `buddy`;
 CREATE TABLE `buddy` (
-    `id` INT(10) UNSIGNED NOT NULL,
+    `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
     `buddyId` INT(10) UNSIGNED NOT NULL,
     `buddyUsername` VARCHAR(12) NOT NULL,
     PRIMARY KEY (`id`, `buddyId`),
