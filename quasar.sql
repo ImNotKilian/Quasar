@@ -48,7 +48,6 @@ CREATE TABLE `ignore` (
     `ignoreId` INT(10) UNSIGNED NOT NULL,
     `ignoreUsername` VARCHAR(12) NOT NULL,
     PRIMARY KEY (`id`, `ignoreId`, `ignoreUsername`),
-    KEY `ignoreId` (`ignoreId`),
     CONSTRAINT `ignore_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `ignore_ibfk_2` FOREIGN KEY (`IgnoreId`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `ignore_ibfk_3` FOREIGN KEY (`ignoreUsername`) REFERENCES `penguins` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -60,7 +59,6 @@ CREATE TABLE `buddy` (
     `buddyId` INT(10) UNSIGNED NOT NULL,
     `buddyUsername` VARCHAR(12) NOT NULL,
     PRIMARY KEY (`id`, `buddyId`, `buddyUsername`),
-    KEY `buddyId` (`buddyId`),
     CONSTRAINT `buddy_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `buddy_ibfk_2` FOREIGN KEY (`buddyId`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `buddy_ibfk_3` FOREIGN KEY (`buddyUsername`) REFERENCES `penguins` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
