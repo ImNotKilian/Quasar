@@ -58,9 +58,7 @@ module.exports = class RoomManager {
    */
   checkIgloo(id) {
     if (this.rooms[id]) {
-      if (this.rooms[id].open === true) {
-        return true
-      }
+      return this.rooms[id].open
     }
   }
 
