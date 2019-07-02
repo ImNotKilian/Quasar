@@ -50,6 +50,12 @@ const xtHandlers = {
     'n#an': { klass: 'ignore', func: 'handleAddIgnore' },
     'n#rn': { klass: 'ignore', func: 'handleRemoveIgnore' },
 
+    'b#gb': { klass: 'buddy', func: 'handleGetBuddies' },
+    'b#ba': { klass: 'buddy', func: 'handleAddBuddy' },
+    'b#br': { klass: 'buddy', func: 'handleBuddyRequest' },
+    'b#rb': { klass: 'buddy', func: 'handleBuddyRemove' },
+    'b#bf': { klass: 'buddy', func: 'handleFindBuddy' },
+
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   }
