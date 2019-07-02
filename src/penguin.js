@@ -54,7 +54,9 @@ module.exports = class Penguin {
     this.ignored = await this.server.database.knex('ignore').select('ignoreId', 'ignoreUsername').where('id', this.id)
 
     // Stuff to convert to an object when needed
-    this.ignored = this.ignored.reduce((o, i) => (o[i.ignoreId] = i.ignoreUsername, o), {})
+    if (this.ignored.length > 0) {
+      this.ignored = this.ignored.reduce((o, i) => (o[i.ignoreId] = i.ignoreUsername, o), {})
+    }
   }
 
   /**
