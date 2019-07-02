@@ -32,6 +32,8 @@ const xtHandlers = {
 
     'm#sm': { klass: 'penguin', func: 'handleSendMessage' },
 
+    'r#cdu': { klass: 'penguin', func: 'handleCoinDigUpdate' },
+
     'i#gi': { klass: 'inventory', func: 'handleGetInventory' },
     'i#ai': { klass: 'inventory', func: 'handleAddItem' },
 

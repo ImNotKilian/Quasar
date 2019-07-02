@@ -25,6 +25,10 @@ module.exports = {
     penguin.x = parseInt(data[0])
     penguin.y = parseInt(data[1])
 
+    if (penguin.coinsDug !== 0) {
+      penguin.coinsDug = 0
+    }
+
     penguin.room.sendXt('sp', penguin.id, penguin.x, penguin.y)
   },
   /**
@@ -178,5 +182,20 @@ module.exports = {
     }
 
     penguin.room.sendXt('sm', penguin.id, message)
+  },
+  /**
+   * Handle the coin digging action
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleCoinDigUpdate: async (data, penguin) => {
+    if (penguin.room && penguin.room.id === 813 && penguin.frame === 26 && penguin.coinsDug < 5) {
+      const coins = ~~(Math.random() * 100) + 1
+
+      await penguin.addCoins(coins)
+      penguin.coinsDug++
+
+      penguin.sendXt('cdu', coins, penguin.coins)
+    }
   }
 }

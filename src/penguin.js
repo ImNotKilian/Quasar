@@ -47,7 +47,7 @@ module.exports = class Penguin {
     this.moderator = Boolean(this.moderator)
     this.age = Number(date - result.created)
 
-    this.x = this.y = 0
+    this.x = this.y = this.coinsDug = 0
     this.frame = 1
     this.requests = []
 
