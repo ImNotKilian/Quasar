@@ -103,6 +103,71 @@ module.exports = class Penguin {
   }
 
   /**
+   * Add a buddy
+   * @param {Number} buddyId
+   */
+  async addBuddy(buddyId) {
+    if (Object.keys(this.buddies).length >= 500) {
+      return this.sendError(901)
+    }
+
+    const idx = this.requests.indexOf(buddyId)
+
+    // Not ignoring, not already buddies and the buddy requested
+    if (!this.ignored[buddyId] && !this.buddies[buddyId] && idx > -1) {
+      const buddyObj = this.server.getPenguinById(buddyId)
+
+      // Both must be online
+      if (buddyObj) {
+        // If the buddy is not buddy with us
+        if (!buddyObj.buddies[this.id]) {
+          const buddyUsername = buddyObj.username
+
+          // Put ourselves into buddies
+          this.buddies[buddyId] = buddyUsername
+          buddyObj.buddies[this.id] = this.username
+
+          // Put ourselves into database
+          await this.server.database.knex('buddy').insert({ id: this.id, buddyId, buddyUsername })
+          await this.server.database.knex('buddy').insert({ id: buddyId, buddyId: this.id, buddyUsername: this.username })
+
+          // Notify that we're buddies
+          buddyObj.sendXt('ba', this.id, this.username)
+
+          // Remove the request
+          this.requests.splice(idx, 1)
+        }
+      }
+    }
+  }
+
+  /**
+   * Remove a buddy
+   * @param {Number} buddyId
+   */
+  async removeBuddy(buddyId) {
+    if (this.buddies[buddyId]) {
+      delete this.buddies[buddyId]
+
+      await this.server.database.knex('buddy').where('buddyId', buddyId).del()
+    }
+
+    const buddyObj = this.server.getPenguinById(buddyId)
+
+    // If the buddy is online and our buddy, delete us stored buddies
+    if (buddyObj && buddyObj.buddies[this.id]) {
+      delete buddyObj.buddies[this.id]
+    }
+
+    await this.server.database.knex('buddy').where('buddyId', this.id).del()
+
+    // Notify that we're not buddies anymore
+    if (buddyObj) {
+      buddyObj.sendXt('rb', this.id, this.username)
+    }
+  }
+
+  /**
    * Update the penguin's outfit
    * @param {String} itemType
    * @param {Number} itemId
