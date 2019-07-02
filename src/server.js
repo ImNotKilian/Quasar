@@ -39,7 +39,7 @@ module.exports = class Server {
      * Start a new server
      */
     network.loadHandlers((len) => {
-      logger.info(`Quasar finished loading ${len} handlers`)
+      logger.info(`Quasar has loaded ${len} handlers`)
       this.startServer()
     })
   }
