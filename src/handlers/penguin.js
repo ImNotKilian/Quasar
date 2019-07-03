@@ -123,7 +123,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleSendMascotMessage: (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room || !penguin.moderator) {
       return penguin.disconnect()
     }
 
