@@ -114,28 +114,21 @@ module.exports = class Penguin {
 
     const idx = this.requests.indexOf(buddyId)
 
-    // Not ignoring, not already buddies and the buddy requested
     if (!this.ignored[buddyId] && !this.buddies[buddyId] && idx > -1) {
       const buddyObj = this.server.getPenguinById(buddyId)
 
-      // Both must be online
       if (buddyObj) {
-        // If the buddy is not buddy with us
         if (!buddyObj.buddies[this.id]) {
           const buddyUsername = buddyObj.username
 
-          // Put ourselves into buddies
           this.buddies[buddyId] = buddyUsername
           buddyObj.buddies[this.id] = this.username
 
-          // Put ourselves into database
           await this.server.database.knex('buddy').insert({ id: this.id, buddyId, buddyUsername })
           await this.server.database.knex('buddy').insert({ id: buddyId, buddyId: this.id, buddyUsername: this.username })
 
-          // Notify that we're buddies
           buddyObj.sendXt('ba', this.id, this.username)
 
-          // Remove the request
           this.requests.splice(idx, 1)
         }
       }
@@ -155,14 +148,12 @@ module.exports = class Penguin {
 
     const buddyObj = this.server.getPenguinById(buddyId)
 
-    // If the buddy is online and our buddy, delete us stored buddies
     if (buddyObj && buddyObj.buddies[this.id]) {
       delete buddyObj.buddies[this.id]
     }
 
     await this.server.database.knex('buddy').where('buddyId', this.id).del()
 
-    // Notify that we're not buddies anymore
     if (buddyObj) {
       buddyObj.sendXt('rb', this.id, this.username)
     }
