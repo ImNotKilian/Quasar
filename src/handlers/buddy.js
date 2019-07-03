@@ -84,7 +84,7 @@ module.exports = {
           }
         }
       } catch (err) {
-        // Do nothing
+        penguin.disconnect()
       }
     }
   },
@@ -105,7 +105,7 @@ module.exports = {
         penguin.sendXt('bf', buddyObj.room.id)
       }
     } catch (err) {
-      // Do nothing
+      penguin.disconnect()
     }
   }
 }
