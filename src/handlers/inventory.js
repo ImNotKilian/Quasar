@@ -29,13 +29,13 @@ module.exports = {
     }
 
     const id = parseInt(data[0])
-    const penguinObj = penguin.server.getPenguinById(id)
 
-    if (penguinObj) {
+    try {
+      const penguinObj = await penguin.server.getPenguinById(id)
       const string = penguinObj.buildString().split('|').slice(0, 12).join('|') + '|'
 
       penguin.sendXt('gp', string)
-    } else {
+    } catch (err) {
       const result = await penguin.server.database.knex('penguins').first('*').where({ id })
 
       if (!result) {

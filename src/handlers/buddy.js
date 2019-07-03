@@ -9,7 +9,7 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleGetBuddies: (data, penguin) => {
+  handleGetBuddies: async (data, penguin) => {
     if (Object.keys(penguin.buddies).length === 0) {
       return penguin.sendXt('gb', '')
     }
@@ -21,13 +21,12 @@ module.exports = {
 
       buddyStr += `${buddyId}|${buddyUsername}|`
 
-      const buddyObj = penguin.server.getPenguinById(buddyId)
+      try {
+        const buddyObj = await penguin.server.getPenguinById(buddyId)
 
-      if (buddyObj) {
         buddyObj.sendXt('bon', penguin.id)
-
         buddyStr += '1%'
-      } else {
+      } catch (err) {
         buddyStr += '0%'
       }
     }
@@ -63,7 +62,7 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleBuddyRequest: (data, penguin) => {
+  handleBuddyRequest: async (data, penguin) => {
     if (data.length !== 1 || isNaN(data[0])) {
       return penguin.disconnect()
     }
@@ -75,15 +74,17 @@ module.exports = {
         return penguin.sendError(901)
       }
 
-      const buddyObj = penguin.server.getPenguinById(buddyId)
+      try {
+        const buddyObj = await penguin.server.getPenguinById(buddyId)
 
-      if (buddyObj) {
         if (Object.keys(buddyObj.buddies).length < 500) {
           if (buddyObj.requests.indexOf(penguin.id) === -1) {
             buddyObj.requests.push(penguin.id)
             buddyObj.sendXt('br', penguin.id, penguin.username)
           }
         }
+      } catch (err) {
+        // Do nothing
       }
     }
   },
@@ -92,15 +93,19 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleFindBuddy: (data, penguin) => {
+  handleFindBuddy: async (data, penguin) => {
     if (data.length !== 1 || isNaN(data[0])) {
       return penguin.disconnect()
     }
 
-    const buddyObj = penguin.server.getPenguinById(parseInt(data[0]))
+    try {
+      const buddyObj = await penguin.server.getPenguinById(parseInt(data[0]))
 
-    if (buddyObj && buddyObj.room) {
-      penguin.sendXt('bf', buddyObj.room.id)
+      if (buddyObj.room) {
+        penguin.sendXt('bf', buddyObj.room.id)
+      }
+    } catch (err) {
+      // Do nothing
     }
   }
 }

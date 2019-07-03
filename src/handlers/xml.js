@@ -76,14 +76,8 @@ module.exports = {
       await penguin.updateColumn(username, 'loginkey', loginkey)
       penguin.sendXt('l', result.id, loginkey, '', `100,${bars}`)
     } else {
-      if (!result.loginkey) {
+      if (!result.loginkey || penguin.server.isPenguinOnline(result.id)) {
         return penguin.disconnect()
-      }
-
-      const penguinObj = penguin.server.getPenguinById(result.id)
-
-      if (penguinObj) {
-        penguinObj.disconnect()
       }
 
       let hash = await createHash('md5').update(result.loginkey + config.KEY).digest('hex')

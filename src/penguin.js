@@ -67,15 +67,13 @@ module.exports = class Penguin {
    */
   async addIgnore(ignoreId) {
     if (!this.ignored[ignoreId]) {
-      const ignoreObj = this.server.getPenguinById(ignoreId)
-
-      if (ignoreObj) {
+      try {
+        const ignoreObj = await this.server.getPenguinById(ignoreId)
         const ignoreUsername = ignoreObj.username
 
         this.ignored[ignoreId] = ignoreUsername
-
         await this.server.database.knex('ignore').insert({ id: this.id, ignoreId, ignoreUsername })
-      } else {
+      } catch (err) {
         const result = await this.server.database.knex('penguins').select('username').first('*').where({ id: ignoreId })
 
         if (!result) {
@@ -85,7 +83,6 @@ module.exports = class Penguin {
         const ignoreUsername = result[0].username
 
         this.ignored[ignoreId] = ignoreUsername
-
         await this.server.database.knex('ignore').insert({ id: this.id, ignoreId, ignoreUsername })
       }
     }
@@ -115,9 +112,9 @@ module.exports = class Penguin {
     const idx = this.requests.indexOf(buddyId)
 
     if (!this.ignored[buddyId] && !this.buddies[buddyId] && idx > -1) {
-      const buddyObj = this.server.getPenguinById(buddyId)
+      try {
+        const buddyObj = await this.server.getPenguinById(buddyId)
 
-      if (buddyObj) {
         if (!buddyObj.buddies[this.id]) {
           const buddyUsername = buddyObj.username
 
@@ -131,6 +128,8 @@ module.exports = class Penguin {
 
           this.requests.splice(idx, 1)
         }
+      } catch (err) {
+        this.disconnect()
       }
     }
   }
@@ -144,18 +143,19 @@ module.exports = class Penguin {
       delete this.buddies[buddyId]
 
       await this.server.database.knex('buddy').where('buddyId', buddyId).del()
-    }
 
-    const buddyObj = this.server.getPenguinById(buddyId)
+      try {
+        const buddyObj = await this.server.getPenguinById(buddyId)
 
-    if (buddyObj && buddyObj.buddies[this.id]) {
-      delete buddyObj.buddies[this.id]
-    }
+        if (buddyObj.buddies[this.id]) {
+          delete buddyObj.buddies[this.id]
+        }
 
-    await this.server.database.knex('buddy').where('buddyId', this.id).del()
-
-    if (buddyObj) {
-      buddyObj.sendXt('rb', this.id, this.username)
+        await this.server.database.knex('buddy').where('buddyId', this.id).del()
+        buddyObj.sendXt('rb', this.id, this.username)
+      } catch (err) {
+        await this.server.database.knex('buddy').where('buddyId', this.id).del()
+      }
     }
   }
 
@@ -295,7 +295,7 @@ module.exports = class Penguin {
    * @param {Number} id
    */
   createIgloo(id) {
-    this.server.roomManager.createIgloo(id)
+    return this.server.roomManager.createIgloo(id)
   }
 
   /**
@@ -318,6 +318,23 @@ module.exports = class Penguin {
   }
 
   /**
+   * Notify buddies when going offline
+   */
+  async notifyBuddies() {
+    if (Object.keys(this.buddies).length > 0) {
+      for (const buddyId in this.buddies) {
+        try {
+          const buddyObj = await this.server.getPenguinById(buddyId)
+
+          buddyObj.sendXt('bof', this.id)
+        } catch (err) {
+          // Do nothing
+        }
+      }
+    }
+  }
+
+  /**
    * Close the penguin's igloo
    */
   closeIgloo() {
@@ -334,7 +351,11 @@ module.exports = class Penguin {
    * @returns {Room}
    */
   getRoomById(id) {
-    return this.server.roomManager.getRoomById(id)
+    return new Promise((resolve, reject) => {
+      const room = this.server.roomManager.getRoomById(id)
+
+      room ? resolve(room) : reject(undefined)
+    })
   }
 
   /**
@@ -349,20 +370,10 @@ module.exports = class Penguin {
   /**
    * Disconnects the penguin
    */
-  disconnect() {
+  async disconnect() {
     if (serverType !== 'LOGIN') {
       this.removeFromRoom()
-
-      if (Object.keys(this.buddies).length > 0) {
-        for (const buddyId in this.buddies) {
-          const buddyObj = this.server.getPenguinById(buddyId)
-
-          if (buddyObj) {
-            buddyObj.sendXt('bof', this.id)
-          }
-        }
-      }
-
+      await this.notifyBuddies()
       this.closeIgloo()
     }
 
