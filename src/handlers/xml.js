@@ -74,6 +74,14 @@ module.exports = {
       const bars = pop >= max ? 6 : Math.round(pop * 5 / max)
 
       await penguin.updateColumn(username, 'loginkey', loginkey)
+
+      /**
+       * I know I know, '' should be the buddy world, which is 100
+       * This is only when the penguin has a buddy and that buddy must be online
+       * This enables the buddy smiley thing
+       * I just don't like why it had to be done like this...
+       * Maybe add it later?
+       */
       penguin.sendXt('l', result.id, loginkey, '', `100,${bars}`)
     } else {
       if (!result.loginkey || penguin.server.isPenguinOnline(result.id)) {
