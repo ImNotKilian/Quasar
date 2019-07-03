@@ -2,6 +2,8 @@
 
 This is a new experimental AS2 Club Penguin emulator of mine. It's focused to be fast and scalable.
 
+For a mediaserver, click [here](https://solero.github.io/tutorial/legacy/windows#setup-media-server)
+
 # Running
 
 ```
