@@ -20,7 +20,7 @@ module.exports = {
       muteObj.muted = !muteObj.muted
       await muteObj.updateColumn(muteObj.id, 'muted', Number(muteObj.muted))
     } catch (err) {
-      // Do nothing
+      penguin.disconnect()
     }
   },
   /**
@@ -38,7 +38,7 @@ module.exports = {
 
       kickObj.sendError(5, true)
     } catch (err) {
-      // Do nothing
+      penguin.disconnect()
     }
   },
   /**
@@ -59,7 +59,7 @@ module.exports = {
       banObj.sendXt('e', 610, data[1])
       banObj.disconnect()
     } catch (err) {
-      // Do nothing
+      penguin.disconnect()
     }
   }
 }
