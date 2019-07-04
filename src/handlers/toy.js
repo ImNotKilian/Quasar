@@ -14,7 +14,7 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    penguin.room.sendXt('at', penguin.id)
+    penguin.room.sendXt('at', penguin.id, 1, 1)
   },
 
   /**
