@@ -39,7 +39,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleAddBuddy: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0])) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
       return penguin.disconnect()
     }
 
@@ -51,7 +51,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleBuddyRemove: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0])) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
       return penguin.disconnect()
     }
 
@@ -63,7 +63,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleBuddyRequest: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0])) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
       return penguin.disconnect()
     }
 
@@ -94,7 +94,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleFindBuddy: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0])) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
       return penguin.disconnect()
     }
 
