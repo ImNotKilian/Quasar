@@ -30,7 +30,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleAddIgnore: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0])) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
       return penguin.disconnect()
     }
 
@@ -42,7 +42,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleRemoveIgnore: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0])) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
       return penguin.disconnect()
     }
 
