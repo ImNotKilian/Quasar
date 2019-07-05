@@ -10,7 +10,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleMute: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0]) || !penguin.moderator) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.moderator || !penguin.room) {
       return penguin.disconnect()
     }
 
@@ -29,7 +29,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleKick: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0]) || !penguin.moderator) {
+    if (data.length !== 1 || isNaN(data[0]) || !penguin.moderator || !penguin.room) {
       return penguin.disconnect()
     }
 
@@ -47,7 +47,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleBan: async (data, penguin) => {
-    if (data.length !== 2 || isNaN(data[0]) || !penguin.moderator) {
+    if (data.length !== 2 || isNaN(data[0]) || !penguin.moderator || !penguin.room) {
       return penguin.disconnect()
     }
 
