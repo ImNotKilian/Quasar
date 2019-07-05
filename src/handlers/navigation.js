@@ -38,6 +38,8 @@ module.exports = {
     const roomId = parseInt(data[0])
 
     if (roomId > 900) {
+      penguin.gameRoomId = roomId
+
       return penguin.sendXt('jg', roomId)
     }
 

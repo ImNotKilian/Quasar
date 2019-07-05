@@ -61,6 +61,10 @@ const xtHandlers = {
 
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
+  },
+
+  'z': {
+    'zo': { klass: 'multiplayer', func: 'handleGameOver' }
   }
 }
 
