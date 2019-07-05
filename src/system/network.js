@@ -69,6 +69,12 @@ const xtHandlers = {
 }
 
 /**
+ * Blacklisted xt packets
+ * @constant
+ */
+const xtBlacklist = ['f#epfga', 'f#epfgr', 'f#epfgf']
+
+/**
  * Xml packets
  * @constant
  */
@@ -158,6 +164,10 @@ module.exports = class Network {
       } catch (err) {
         penguin.disconnect()
       } finally {
+        if (xtBlacklist.indexOf(handler) > -1) {
+          return
+        }
+
         if (!xtHandlers[type][handler]) {
           logger.error(`Unknown xt data: ${data}`)
         } else {
