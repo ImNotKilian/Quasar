@@ -122,7 +122,7 @@ module.exports = class Network {
    * @param {Penguin} penguin
    */
   static handleData(data, penguin) {
-    data = data.toString().slice(0, -1)
+    data = data.toString().split('\0')[0]
 
     const firstChar = data.charAt(0)
     const lastChar = data.charAt(data.length - 1)
