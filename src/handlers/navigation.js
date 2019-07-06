@@ -16,10 +16,8 @@ module.exports = {
 
     penguin.sendXt('js', 0, 0, Number(penguin.moderator), 0)
     penguin.sendXt('gps', '')
+    penguin.sendXt('lp', penguin.buildString(), penguin.coins, 0, 1440, Date.now() / 1000 | 0 * 1000, penguin.age, 0, 1, '', 7)
 
-    const time = Date.now() / 1000 | 0 * 1000
-
-    penguin.sendXt('lp', penguin.buildString(), penguin.coins, 0, 1440, time, penguin.age, 0, 1, '', 7)
     penguin.inWorld = true
     penguin.joinRandomRoom()
   },
