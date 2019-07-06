@@ -59,6 +59,13 @@ const xtHandlers = {
     'o#k': { klass: 'moderation', func: 'handleKick' },
     'o#b': { klass: 'moderation', func: 'handleBan' },
 
+    'l#mst': { klass: 'mail', func: 'handleStartMail' },
+    'l#mg': { klass: 'mail', func: 'handleGetMail' },
+    'l#ms': { klass: 'mail', func: 'handleSendMail' },
+    'l#mc': { klass: 'mail', func: 'handleCheckMail' },
+    'l#md': { klass: 'mail', func: 'handleDeleteMail' },
+    'l#mdp': { klass: 'mail', func: 'handleDeleteMailFromPenguin' },
+
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   },
