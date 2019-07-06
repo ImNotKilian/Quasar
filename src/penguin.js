@@ -55,10 +55,16 @@ module.exports = class Penguin {
     this.inventory = await this.server.database.knex('inventory').pluck('itemId').where('id', this.id)
     this.ignored = await this.server.database.knex('ignore').select('ignoreId', 'ignoreUsername').where('id', this.id)
     this.buddies = await this.server.database.knex('buddy').select('buddyId', 'buddyUsername').where('id', this.id)
+    this.mail = await this.server.database.knex('mail').select('*').where('recipientId', this.id)
 
-    // Stuff to convert to an object when needed
     if (this.ignored.length > 0) this.ignored = this.ignored.reduce((o, i) => (o[i.ignoreId] = i.ignoreUsername, o), {})
+    else this.ignored = {}
+
     if (this.buddies.length > 0) this.buddies = this.buddies.reduce((o, i) => (o[i.buddyId] = i.buddyUsername, o), {})
+    else this.buddies = {}
+
+    if (this.mail.length > 0) this.mail = this.mail.reduce((o, i) => (o[i.id] = JSON.parse(JSON.stringify(i)), o), {})
+    else this.mail = {}
   }
 
   /**
