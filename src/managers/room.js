@@ -1,7 +1,6 @@
 'use strict'
 
 const Room = require('../system/room')
-const rooms = require('../crumbs/rooms')
 
 /**
  * @exports
@@ -27,7 +26,7 @@ module.exports = class RoomManager {
    * Load the rooms
    */
   loadRooms() {
-    for (const id in rooms) {
+    for (const id in require('../crumbs/rooms')) {
       if (id < 900) {
         const roomObj = rooms[id]
 
