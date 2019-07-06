@@ -34,7 +34,28 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    await penguin.addIgnore(parseInt(data[0]))
+    const ignoreId = parseInt(data[0])
+
+    if (!penguin.ignored[ignoreId]) {
+      try {
+        const ignoreObj = await penguin.server.getPenguinById(ignoreId)
+        const ignoreUsername = ignoreObj.username
+
+        penguin.ignored[ignoreId] = ignoreUsername
+        await penguin.server.database.knex('ignore').insert({ id: penguin.id, ignoreId, ignoreUsername })
+      } catch (err) {
+        const result = await penguin.server.database.knex('penguins').select('username').first('*').where({ id: ignoreId })
+
+        if (!result) {
+          return penguin.disconnect()
+        }
+
+        const ignoreUsername = result[0].username
+
+        penguin.ignored[ignoreId] = ignoreUsername
+        await penguin.server.database.knex('ignore').insert({ id: penguin.id, ignoreId, ignoreUsername })
+      }
+    }
   },
   /**
    * Remove an ignore
@@ -46,6 +67,12 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    await penguin.removeIgnore(parseInt(data[0]))
+    const ignoreId = parseInt(data[0])
+
+    if (penguin.ignored[ignoreId]) {
+      delete penguin.ignored[ignoreId]
+
+      await penguin.server.database.knex('ignore').where('ignoreId', ignoreId).del()
+    }
   }
 }
