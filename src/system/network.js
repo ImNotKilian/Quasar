@@ -176,7 +176,7 @@ module.exports = class Network {
           return
         }
 
-        if (!xtHandlers[type][handler]) {
+        if (!xtHandlers[type] || !xtHandlers[type][handler]) {
           logger.error(`Unknown xt data: ${data}`)
         } else {
           logger.incoming(data)
