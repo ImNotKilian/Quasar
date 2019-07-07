@@ -34,7 +34,11 @@ app.post('/registerPost', async (req, res) => {
     if (!isNaN(color)) {
       color = parseInt(color)
 
-      if (username.length >= 4 && username.length <= 12 && encodeURIComponent(username) === username) {
+      // Usernames can contain a-z, A-Z, 0-9 and a space
+      // Thanks to Valid22
+      const matches = username.match(/^[a-zA-Z0-9 ]+$/)
+
+      if (username.length >= 4 && username.length <= 12 && matches) {
         if (password.length >= 4 && password.length <= 12) {
           if (color >= 1 && color <= 13) {
             try {
