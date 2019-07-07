@@ -6,13 +6,32 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Register</title>
+
+  <style>
+    img {
+      position: absolute;
+      left: 180px;
+      top: -25px;
+    }
+  </style>
+
+  <script>
+    function updatePenguin() {
+      var e = document.getElementById("color");
+      var color = e.options[e.selectedIndex].value;
+
+      document.getElementById("colorDisp").src = "./colors/" + color + ".png";
+    }
+  </script>
 </head>
 
 <body>
+  <img id="colorDisp" src="./colors/1.png" />
+
   <form method="POST" action="/registerPost">
     Username:<br><input type="text" name="username" minlength="4" maxlength="12" required><br>
     Password:<br><input type="password" name="password" minlength="4" maxlength="12" required><br>
-    Color: <select name="color">
+    Color: <select onchange="updatePenguin();" id="color" name="color">
       <option value="1">Blue</option>
       <option value="2">Green</option>
       <option value="3">Pink</option>
