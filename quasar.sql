@@ -51,7 +51,7 @@ CREATE TABLE `mail` (
     `senderName` VARCHAR(12) NOT NULL,
     `recipientId` INT(10) UNSIGNED NOT NULL,
     `type` SMALLINT(5) UNSIGNED NOT NULL,
-    `date` INT(10) NOT NULL,
+    `date` INT(10) UNSIGNED NOT NULL,
     `read` BOOLEAN NOT NULL DEFAULT 0 CHECK (`read` BETWEEN 0 AND 1),
     PRIMARY KEY (`id`),
     CONSTRAINT `mail_ibfk_1` FOREIGN KEY (`senderId`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
