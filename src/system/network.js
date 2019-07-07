@@ -15,6 +15,7 @@ const xtHandlers = {
     'j#js': { klass: 'navigation', func: 'handleJoinServer' },
     'j#jr': { klass: 'navigation', func: 'handleJoinRoom' },
     'j#jp': { klass: 'navigation', func: 'handleJoinPlayer' },
+    'j#grs': { klass: 'navigation', func: 'handleRoomRefresh' },
 
     'u#h': { klass: 'penguin', func: 'handleHeartBeat' },
     'u#sp': { klass: 'penguin', func: 'handleSendPosition' },

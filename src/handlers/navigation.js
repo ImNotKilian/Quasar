@@ -80,5 +80,15 @@ module.exports = {
     } catch (err) {
       penguin.sendError(10011)
     }
+  },
+  /**
+   * Refresh a room
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleRoomRefresh: (data, penguin) => {
+    if (penguin.room) {
+      penguin.sendx('grs', penguin.room.id, penguin.room.buildString())
+    }
   }
 }
