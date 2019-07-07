@@ -34,8 +34,6 @@ app.post('/registerPost', async (req, res) => {
     if (!isNaN(color)) {
       color = parseInt(color)
 
-      // Usernames can contain a-z, A-Z, 0-9 and a space
-      // Thanks to Valid22
       const matches = username.match(/^[a-zA-Z0-9 ]+$/)
 
       if (username.length >= 4 && username.length <= 12 && matches) {
@@ -74,10 +72,9 @@ const start = async () => {
     await app.register(require('fastify-static'), { root: require('path').join(__dirname, 'public') })
     await app.register(require('fastify-formbody'))
 
-    await app.listen(REGISTER.PORT, REGISTER.HOST)
+    await app.listen(REGISTER.PORT, REGISTER.HOST, (err, addr) => console.log(`Quasar register listening on ${addr}`))
 
     process.title = 'Quasar@REGISTER'
-    console.log('Quasar register listening')
   } catch (err) {
     console.log(err)
     process.exit(1)
