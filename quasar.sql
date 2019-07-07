@@ -85,3 +85,8 @@ CREATE TRIGGER `insert_color`
   AFTER INSERT ON `penguins`
   FOR EACH ROW
   INSERT INTO `inventory` (`id`, `itemId`) VALUES (NEW.id, NEW.color);
+
+CREATE TRIGGER `insert_mail`
+  AFTER INSERT ON `penguins`
+  FOR EACH ROW
+  INSERT INTO `mail` (`senderId`, `senderName`, `recipientId`, `type`, `date`) VALUES ('100', 'Zaseth', NEW.id, 125, UNIX_TIMESTAMP());
