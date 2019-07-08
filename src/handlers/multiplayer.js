@@ -31,6 +31,6 @@ module.exports = {
 
     penguin.lastGame = time
     await penguin.addCoins(coins)
-    penguin.sendXt('zo', penguin.coins)
+    penguin.sendXt('zo', penguin.coins, '', 0, 0, 0)
   }
 }
