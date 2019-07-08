@@ -87,8 +87,7 @@ module.exports = {
 
     if (penguin.buddies[buddyId]) {
       delete penguin.buddies[buddyId]
-
-      await penguin.server.database.knex('buddy').where('buddyId', buddyId).del()
+      await penguin.server.database.knex('buddy').where('buddyId', buddyId).andWhere('id', penguin.id).del()
 
       try {
         const buddyObj = await penguin.server.getPenguinById(buddyId)
