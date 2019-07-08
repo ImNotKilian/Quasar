@@ -117,16 +117,11 @@ module.exports = {
       return penguin.sendError(401)
     }
 
-    if (penguin.inventory.indexOf(itemId) === -1) {
-      await penguin.removeCoins(cost)
+    penguin.inventory.push(itemId)
 
-      penguin.inventory.push(itemId)
+    await penguin.removeCoins(cost)
+    await penguin.server.database.knex('inventory').insert({ id: penguin.id, itemId })
 
-      await penguin.server.database.knex('inventory').insert({ id: penguin.id, itemId })
-
-      penguin.sendXt('ai', itemId, penguin.coins)
-    } else {
-      penguin.sendError(400)
-    }
+    penguin.sendXt('ai', itemId, penguin.coins)
   }
 }
