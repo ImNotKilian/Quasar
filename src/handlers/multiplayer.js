@@ -14,8 +14,20 @@ module.exports = {
       return penguin.disconnect()
     }
 
+    const coins = parseInt(data[0])
     const time = Date.now() / 1000 | 0
-    const coins = penguin.lastGame > time - 30 ? 0 : parseInt(Math.round(data[0] / 4))
+
+    let earned = 0
+
+    if ([904, 905, 906, 912, 916, 917, 918, 919, 950, 952].indexOf(penguin.gameRoomId) > -1) {
+      earned = coins
+    } else {
+      earned = Math.ceil(coins / 10)
+    }
+
+    if (penguin.lastGame > time - 30) {
+      earned = 0
+    }
 
     penguin.lastGame = time
     await penguin.addCoins(coins)
