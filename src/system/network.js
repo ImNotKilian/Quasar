@@ -69,6 +69,12 @@ const xtHandlers = {
     'l#md': { klass: 'mail', func: 'handleDeleteMail' },
     'l#mdp': { klass: 'mail', func: 'handleDeleteMailFromPenguin' },
 
+    'st#gps': { klass: 'stamps', func: 'handleGetStamps' },
+    'st#gsbcd': { klass: 'stamps', func: 'handleGetStampBookCoverDetails' },
+    'st#gmres': { klass: 'stamps', func: 'handleGetMyRecentlyEarnedStamps' },
+    'st#ssbcd': { klass: 'stamps', func: 'handleSetStampBookCoverDetails' },
+    'st#sse': { klass: 'stamps', func: 'handleAddStamp' },
+
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   },
