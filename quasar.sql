@@ -83,6 +83,19 @@ CREATE TABLE `buddy` (
     CONSTRAINT `buddy_ibfk_3` FOREIGN KEY (`buddyUsername`) REFERENCES `penguins` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS `stamps`;
+CREATE TABLE `stamps` (
+    `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
+    `stampId` SMALLINT(5) UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`, `stampId`),
+    CONSTRAINT `stamps_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `stamps` WRITE;
+INSERT INTO `stamps` VALUES (100, 7);
+INSERT INTO `stamps` VALUES (100, 8);
+UNLOCK TABLES;
+
 CREATE TRIGGER `insert_color`
   AFTER INSERT ON `penguins`
   FOR EACH ROW
