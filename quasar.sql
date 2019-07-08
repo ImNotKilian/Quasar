@@ -99,7 +99,7 @@ UNLOCK TABLES;
 CREATE TRIGGER `insert_color`
   AFTER INSERT ON `penguins`
   FOR EACH ROW
-  INSERT INTO `inventory` (`id`, `itemId`) VALUES (NEW.id, NEW.color);
+  INSERT INTO `inventory` VALUES (NEW.id, NEW.color);
 
 CREATE TRIGGER `insert_mail`
   AFTER INSERT ON `penguins`
