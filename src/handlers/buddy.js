@@ -45,6 +45,10 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
+    if (buddyId === penguin.id) {
+      return penguin.disconnect()
+    }
+
     if (Object.keys(penguin.buddies).length >= 500) {
       return penguin.sendError(901)
     }
@@ -85,6 +89,10 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
+    if (buddyId === penguin.id) {
+      return penguin.disconnect()
+    }
+
     if (penguin.buddies[buddyId]) {
       delete penguin.buddies[buddyId]
       await penguin.server.database.knex('buddy').where('buddyId', buddyId).andWhere('id', penguin.id).del()
@@ -115,23 +123,25 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
-    if (buddyId !== penguin.id) {
-      if (Object.keys(penguin.buddies).length >= 500) {
-        return penguin.sendError(901)
-      }
+    if (buddyId === penguin.id) {
+      return penguin.disconnect()
+    }
 
-      try {
-        const buddyObj = await penguin.server.getPenguinById(buddyId)
+    if (Object.keys(penguin.buddies).length >= 500) {
+      return penguin.sendError(901)
+    }
 
-        if (Object.keys(buddyObj.buddies).length < 500) {
-          if (buddyObj.requests.indexOf(penguin.id) === -1) {
-            buddyObj.requests.push(penguin.id)
-            buddyObj.sendXt('br', penguin.id, penguin.username)
-          }
+    try {
+      const buddyObj = await penguin.server.getPenguinById(buddyId)
+
+      if (Object.keys(buddyObj.buddies).length < 500) {
+        if (buddyObj.requests.indexOf(penguin.id) === -1) {
+          buddyObj.requests.push(penguin.id)
+          buddyObj.sendXt('br', penguin.id, penguin.username)
         }
-      } catch (err) {
-        penguin.disconnect()
       }
+    } catch (err) {
+      penguin.disconnect()
     }
   },
   /**
