@@ -134,6 +134,20 @@ module.exports = {
 
     const id = parseInt(data[0])
 
+    if (penguin.id === id) {
+      let awardStr = ''
+
+      for (let i = 0; i < penguin.inventory.length; i++) {
+        const item = penguin.inventory[i]
+
+        if (awards[item]) {
+          awardStr += `${item}|${awards[item].unix}|1%`
+        }
+      }
+
+      return penguin.sendXt('qpa', awardStr.slice(0, -1))
+    }
+
     try {
       const penguinObj = await penguin.server.getPenguinById(id)
       let awardStr = ''
@@ -173,6 +187,20 @@ module.exports = {
     }
 
     const id = parseInt(data[0])
+
+    if (penguin.id === id) {
+      let pinStr = ''
+
+      for (let i = 0; i < penguin.inventory.length; i++) {
+        const item = penguin.inventory[i]
+
+        if (pins[item]) {
+          pinStr += `${item}|${pins[item].unix}|1%`
+        }
+      }
+
+      return penguin.sendXt('qpp', pinStr.slice(0, -1))
+    }
 
     try {
       const penguinObj = await penguin.server.getPenguinById(id)
