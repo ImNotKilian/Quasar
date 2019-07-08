@@ -45,10 +45,6 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
-    if (buddyId === penguin.id) {
-      return penguin.disconnect()
-    }
-
     if (Object.keys(penguin.buddies).length >= 500) {
       return penguin.sendError(901)
     }
@@ -89,10 +85,6 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
-    if (buddyId === penguin.id) {
-      return penguin.disconnect()
-    }
-
     if (penguin.buddies[buddyId]) {
       delete penguin.buddies[buddyId]
       await penguin.server.database.knex('buddy').where('buddyId', buddyId).andWhere('id', penguin.id).del()
@@ -122,10 +114,6 @@ module.exports = {
     }
 
     const buddyId = parseInt(data[0])
-
-    if (buddyId === penguin.id) {
-      return penguin.disconnect()
-    }
 
     if (Object.keys(penguin.buddies).length >= 500) {
       return penguin.sendError(901)
