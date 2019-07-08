@@ -41,8 +41,6 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 INSERT INTO `inventory` VALUES (100, 1);
-INSERT INTO `inventory` VALUES (100, 550);
-INSERT INTO `inventory` VALUES (100, 801);
 INSERT INTO `inventory` VALUES (101, 1);
 UNLOCK TABLES;
 
@@ -94,6 +92,8 @@ CREATE TABLE `stamps` (
 LOCK TABLES `stamps` WRITE;
 INSERT INTO `stamps` VALUES (100, 7);
 INSERT INTO `stamps` VALUES (100, 8);
+INSERT INTO `stamps` VALUES (101, 7);
+INSERT INTO `stamps` VALUES (101, 8);
 UNLOCK TABLES;
 
 CREATE TRIGGER `insert_color`
