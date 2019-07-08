@@ -82,7 +82,7 @@ module.exports = class Penguin {
    * @param {Number} amount
    */
   async removeCoins(amount) {
-    this.coins -= amount
+    this.coins = Math.min(1000000, Math.max(this.coins - amount, 0))
     await this.updateColumn(this.id, 'coins', this.coins)
   }
 
@@ -91,7 +91,7 @@ module.exports = class Penguin {
    * @param {Number} amount
    */
   async addCoins(amount) {
-    this.coins += amount
+    this.coins = Math.max(0, Math.min(this.coins + amount, 1000000))
     await this.updateColumn(this.id, 'coins', this.coins)
   }
 
