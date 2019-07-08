@@ -210,9 +210,9 @@ module.exports = class Penguin {
   }
 
   /**
-   * Notify buddies when going offline
+   * Go offline if we have buddies
    */
-  async notifyBuddies() {
+  async buddyOffline() {
     if (Object.keys(this.buddies).length > 0) {
       for (const buddyId in this.buddies) {
         try {
@@ -265,8 +265,10 @@ module.exports = class Penguin {
   async disconnect() {
     if (serverType !== 'LOGIN') {
       this.removeFromRoom()
-      await this.notifyBuddies()
       this.closeIgloo()
+
+      await this.buddyOffline()
+      await this.updateColumn(this.id, 'minutesPlayed', this.minutesPlayed)
     }
 
     this.server.removePenguin(this)
