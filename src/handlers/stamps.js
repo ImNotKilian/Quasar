@@ -15,9 +15,20 @@ module.exports = {
     }
 
     const id = parseInt(data[0])
-    const stamps = await penguin.server.database.knex('stamps').pluck('stampId').where('id', id)
 
-    penguin.sendXt('gps', id, stamps.length === 0 ? '' : stamps.join('|'))
+    if (penguin.id === id) {
+      return penguin.sendXt('gps', id, penguin.stamps.length === 0 ? '' : penguin.stamps.join('|'))
+    }
+
+    try {
+      const penguinObj = await penguin.server.getPenguinById(id)
+
+      penguin.sendXt('gps', id, penguinObj.stamps.length === 0 ? '' : penguinObj.stamps.join('|'))
+    } catch (err) {
+      const stamps = await penguin.server.database.knex('stamps').pluck('stampId').where('id', id)
+
+      penguin.sendXt('gps', id, stamps.length === 0 ? '' : stamps.join('|'))
+    }
   },
   /**
    * Retrieve stampbook cover details
