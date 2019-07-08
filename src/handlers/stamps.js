@@ -44,7 +44,8 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleGetMyRecentlyEarnedStamps: (data, penguin) => {
-    // Todo
+    // Todo, maybe later
+    penguin.sendXt('gmres', '')
   },
   /**
    * Set stampbook cover details
