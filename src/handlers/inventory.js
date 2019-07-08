@@ -146,20 +146,9 @@ module.exports = {
         }
       }
 
-      penguinObj.sendXt('qpa', awardStr.slice(0, -1))
-    } catch (err) {
-      const inventory = await penguin.server.database.knex('inventory').pluck('itemId').where('id', id)
-      let awardStr = ''
-
-      for (let i = 0; i < inventory.length; i++) {
-        const item = inventory[i]
-
-        if (awards[item]) {
-          awardStr += `${item}|${awards[item].unix}|1%`
-        }
-      }
-
       penguin.sendXt('qpa', awardStr.slice(0, -1))
+    } catch (err) {
+      // Do nothing
     }
   },
   /**
@@ -186,20 +175,9 @@ module.exports = {
         }
       }
 
-      penguinObj.sendXt('qpp', pinStr.slice(0, -1))
-    } catch (err) {
-      const inventory = await penguin.server.database.knex('inventory').pluck('itemId').where('id', id)
-      let pinStr = ''
-
-      for (let i = 0; i < inventory.length; i++) {
-        const item = inventory[i]
-
-        if (pins[item]) {
-          pinStr += `${item}|${pins[item].unix}|1%`
-        }
-      }
-
       penguin.sendXt('qpp', pinStr.slice(0, -1))
+    } catch (err) {
+      // Do nothing
     }
   }
 }
