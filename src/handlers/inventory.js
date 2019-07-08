@@ -119,8 +119,17 @@ module.exports = {
       return penguin.sendError(401)
     }
 
-    await penguin.removeCoins(cost)
-    await penguin.addItem(itemId)
+    if (penguin.inventory.indexOf(itemId) === -1) {
+      await penguin.removeCoins(cost)
+
+      penguin.inventory.push(itemId)
+
+      await penguin.server.database.knex('inventory').insert({ id: penguin.id, itemId })
+
+      penguin.sendXt('ai', itemId, penguin.coins)
+    } else {
+      penguin.sendError(400)
+    }
   },
   /**
    * Query player awards

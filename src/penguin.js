@@ -97,22 +97,6 @@ module.exports = class Penguin {
   }
 
   /**
-  * Add an item
-  * @param {Number} itemId
-  */
-  async addItem(itemId) {
-    if (this.inventory.indexOf(itemId) === -1) {
-      this.inventory.push(itemId)
-
-      await this.server.database.knex('inventory').insert({ id: this.id, itemId })
-
-      this.sendXt('ai', itemId, this.coins)
-    } else {
-      this.sendError(400)
-    }
-  }
-
-  /**
    * Build the penguin string
    * @returns {String}
    */
