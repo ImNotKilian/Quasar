@@ -56,7 +56,6 @@ module.exports = class Penguin {
     this.ignored = await this.server.database.knex('ignore').select('ignoreId', 'ignoreUsername').where('id', this.id)
     this.buddies = await this.server.database.knex('buddy').select('buddyId', 'buddyUsername').where('id', this.id)
     this.mail = await this.server.database.knex('mail').select('*').where('recipientId', this.id)
-    this.stamps = await this.server.database.knex('stamps').pluck('stampId').where('id', this.id)
 
     if (this.ignored.length > 0) this.ignored = this.ignored.reduce((o, i) => (o[i.ignoreId] = i.ignoreUsername, o), {})
     else this.ignored = {}

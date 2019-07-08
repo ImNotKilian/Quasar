@@ -45,8 +45,6 @@ const xtHandlers = {
     's#upe': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#upl': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#upp': { klass: 'inventory', func: 'handleUpdateClothing' },
-    'i#qpa': { klass: 'inventory', func: 'handleQueryPlayerAwards' },
-    'i#qpp': { klass: 'inventory', func: 'handleQueryPlayerPins' },
 
     'n#gn': { klass: 'ignore', func: 'handleGetIgnored' },
     'n#an': { klass: 'ignore', func: 'handleAddIgnore' },
@@ -68,12 +66,6 @@ const xtHandlers = {
     'l#mc': { klass: 'mail', func: 'handleCheckMail' },
     'l#md': { klass: 'mail', func: 'handleDeleteMail' },
     'l#mdp': { klass: 'mail', func: 'handleDeleteMailFromPenguin' },
-
-    'st#gps': { klass: 'stamps', func: 'handleGetStamps' },
-    'st#gsbcd': { klass: 'stamps', func: 'handleGetStampBookCoverDetails' },
-    'st#gmres': { klass: 'stamps', func: 'handleGetMyRecentlyEarnedStamps' },
-    'st#ssbcd': { klass: 'stamps', func: 'handleSetStampBookCoverDetails' },
-    'st#sse': { klass: 'stamps', func: 'handleAddStamp' },
 
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }

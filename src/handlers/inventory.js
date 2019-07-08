@@ -1,8 +1,6 @@
 'use strict'
 
 const items = require('../crumbs/items')
-const awards = require('../crumbs/awards')
-const pins = require('../crumbs/pins')
 
 /**
  * @exports
@@ -129,114 +127,6 @@ module.exports = {
       penguin.sendXt('ai', itemId, penguin.coins)
     } else {
       penguin.sendError(400)
-    }
-  },
-  /**
-   * Query player awards
-   * @param {Array} data
-   * @param {Penguin} penguin
-   */
-  handleQueryPlayerAwards: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
-      return penguin.disconnect()
-    }
-
-    const id = parseInt(data[0])
-
-    if (penguin.id === id) {
-      let awardStr = ''
-
-      for (let i = 0; i < penguin.inventory.length; i++) {
-        const item = penguin.inventory[i]
-
-        if (awards[item]) {
-          awardStr += `${item}|${awards[item].unix}|1%`
-        }
-      }
-
-      return penguin.sendXt('qpa', awardStr.slice(0, -1))
-    }
-
-    try {
-      const penguinObj = await penguin.server.getPenguinById(id)
-      let awardStr = ''
-
-      for (let i = 0; i < penguinObj.inventory.length; i++) {
-        const item = penguinObj.inventory[i]
-
-        if (awards[item]) {
-          awardStr += `${item}|${awards[item].unix}|1%`
-        }
-      }
-
-      penguin.sendXt('qpa', awardStr.slice(0, -1))
-    } catch (err) {
-      const inventory = await penguin.server.database.knex('inventory').pluck('itemId').where('id', id)
-      let awardStr = ''
-
-      for (let i = 0; i < inventory.length; i++) {
-        const item = inventory[i]
-
-        if (awards[item]) {
-          awardStr += `${item}|${awards[item].unix}|1%`
-        }
-      }
-
-      penguin.sendXt('qpa', awardStr.slice(0, -1))
-    }
-  },
-  /**
-   * Query player pins
-   * @param {Array} data
-   * @param {Penguin} penguin
-   */
-  handleQueryPlayerPins: async (data, penguin) => {
-    if (data.length !== 1 || isNaN(data[0]) || !penguin.room) {
-      return penguin.disconnect()
-    }
-
-    const id = parseInt(data[0])
-
-    if (penguin.id === id) {
-      let pinStr = ''
-
-      for (let i = 0; i < penguin.inventory.length; i++) {
-        const item = penguin.inventory[i]
-
-        if (pins[item]) {
-          pinStr += `${item}|${pins[item].unix}|1%`
-        }
-      }
-
-      return penguin.sendXt('qpp', pinStr.slice(0, -1))
-    }
-
-    try {
-      const penguinObj = await penguin.server.getPenguinById(id)
-      let pinStr = ''
-
-      for (let i = 0; i < penguinObj.inventory.length; i++) {
-        const item = penguinObj.inventory[i]
-
-        if (pins[item]) {
-          pinStr += `${item}|${pins[item].unix}|1%`
-        }
-      }
-
-      penguin.sendXt('qpp', pinStr.slice(0, -1))
-    } catch (err) {
-      const inventory = await penguin.server.database.knex('inventory').pluck('itemId').where('id', id)
-      let pinStr = ''
-
-      for (let i = 0; i < inventory.length; i++) {
-        const item = inventory[i]
-
-        if (pins[item]) {
-          pinStr += `${item}|${pins[item].unix}|1%`
-        }
-      }
-
-      penguin.sendXt('qpp', pinStr.slice(0, -1))
     }
   }
 }
