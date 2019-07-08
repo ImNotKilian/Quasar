@@ -71,8 +71,7 @@ module.exports = {
 
     if (penguin.ignored[ignoreId]) {
       delete penguin.ignored[ignoreId]
-
-      await penguin.server.database.knex('ignore').where('ignoreId', ignoreId).del()
+      await penguin.server.database.knex('ignore').where('ignoreId', ignoreId).andWhere('id', penguin.id).del()
     }
   }
 }
