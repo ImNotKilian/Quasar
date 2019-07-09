@@ -14,12 +14,12 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    try {
-      const muteObj = await penguin.server.getPenguinById(parseInt(data[0]))
+    const muteObj = penguin.server.getPenguinById(parseInt(data[0]))
 
+    if (muteObj) {
       muteObj.muted = !muteObj.muted
       await muteObj.updateColumn(muteObj.id, 'muted', Number(muteObj.muted))
-    } catch (err) {
+    } else {
       penguin.disconnect()
     }
   },
@@ -28,16 +28,16 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleKick: async (data, penguin) => {
+  handleKick: (data, penguin) => {
     if (data.length !== 1 || isNaN(data[0]) || !penguin.moderator || !penguin.room) {
       return penguin.disconnect()
     }
 
-    try {
-      const kickObj = await penguin.server.getPenguinById(parseInt(data[0]))
+    const kickObj = penguin.server.getPenguinById(parseInt(data[0]))
 
+    if (kickObj) {
       kickObj.sendError(5, true)
-    } catch (err) {
+    } else {
       penguin.disconnect()
     }
   },
@@ -51,14 +51,14 @@ module.exports = {
       return penguin.disconnect()
     }
 
-    try {
-      const banObj = await penguin.server.getPenguinById(parseInt(data[0]))
+    const banObj = penguin.server.getPenguinById(parseInt(data[0]))
 
+    if (banObj) {
       await banObj.updateColumn(banObj.id, 'ban', 1)
 
       banObj.sendXt('e', 610, data[1])
       banObj.disconnect()
-    } catch (err) {
+    } else {
       penguin.disconnect()
     }
   }

@@ -37,13 +37,14 @@ module.exports = {
     const ignoreId = parseInt(data[0])
 
     if (!penguin.ignored[ignoreId]) {
-      try {
-        const ignoreObj = await penguin.server.getPenguinById(ignoreId)
+      const ignoreObj = penguin.server.getPenguinById(ignoreId)
+
+      if (ignoreObj) {
         const ignoreUsername = ignoreObj.username
 
         penguin.ignored[ignoreId] = ignoreUsername
         await penguin.server.database.knex('ignore').insert({ id: penguin.id, ignoreId, ignoreUsername })
-      } catch (err) {
+      } else {
         const result = await penguin.server.database.knex('penguins').select('username').first('*').where({ id: ignoreId })
 
         if (!result) {

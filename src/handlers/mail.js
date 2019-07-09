@@ -61,8 +61,9 @@ module.exports = {
       return penguin.sendXt('ms', penguin.coins, 2)
     }
 
-    try {
-      const penguinObj = await penguin.server.getPenguinById(recipientId)
+    const penguinObj = penguin.server.getPenguinById(recipientId)
+
+    if (penguinObj) {
       const date = Date.now() / 1000 | 0
 
       if (Object.keys(penguinObj.mail).length > 99) {
@@ -83,7 +84,7 @@ module.exports = {
         date: date,
         read: false
       }
-    } catch (err) {
+    } else {
       penguin.disconnect()
     }
   },

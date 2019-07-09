@@ -187,7 +187,7 @@ module.exports = class Penguin {
    * @param {Number} id
    */
   createIgloo(id) {
-    return this.server.roomManager.createIgloo(id)
+    this.server.roomManager.createIgloo(id)
   }
 
   /**
@@ -212,15 +212,13 @@ module.exports = class Penguin {
   /**
    * Go offline if we have buddies
    */
-  async buddyOffline() {
+  buddyOffline() {
     if (Object.keys(this.buddies).length > 0) {
       for (const buddyId in this.buddies) {
-        try {
-          const buddyObj = await this.server.getPenguinById(buddyId)
+        const buddyObj = this.server.getPenguinById(buddyId)
 
+        if (buddyObj) {
           buddyObj.sendXt('bof', this.id)
-        } catch (err) {
-          // Do nothing
         }
       }
     }
@@ -243,11 +241,7 @@ module.exports = class Penguin {
    * @returns {Room}
    */
   getRoomById(id) {
-    return new Promise((resolve, reject) => {
-      const room = this.server.roomManager.getRoomById(id)
-
-      room ? resolve(room) : reject(undefined)
-    })
+    return this.server.roomManager.getRoomById(id)
   }
 
   /**
@@ -266,8 +260,8 @@ module.exports = class Penguin {
     if (serverType !== 'LOGIN') {
       this.removeFromRoom()
       this.closeIgloo()
+      this.buddyOffline()
 
-      await this.buddyOffline()
       await this.updateColumn(this.id, 'minutesPlayed', this.minutesPlayed)
     }
 

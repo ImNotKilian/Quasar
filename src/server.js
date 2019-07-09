@@ -32,7 +32,7 @@ module.exports = class Server {
      * The room manager class
      * @type {RoomManager}
      */
-    if (serverType !== 'LOGIN') {
+    if (serverType === 'WORLD') {
       this.roomManager = new (require('./managers/room'))
     }
     /**
@@ -99,17 +99,13 @@ module.exports = class Server {
    * @returns {Object}
    */
   getPenguinById(id) {
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.penguins.length; i++) {
-        const penguin = this.penguins[i]
+    for (let i = 0; i < this.penguins.length; i++) {
+      const penguin = this.penguins[i]
 
-        if (penguin.id && penguin.id === parseInt(id)) {
-          resolve(penguin)
-        }
+      if (penguin.id && penguin.id === parseInt(id)) {
+        return penguin
       }
-
-      reject(undefined)
-    })
+    }
   }
 
   /**

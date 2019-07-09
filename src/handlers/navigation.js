@@ -26,7 +26,7 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleJoinRoom: async (data, penguin) => {
+  handleJoinRoom: (data, penguin) => {
     if (data.length !== 3 || isNaN(data[0]) || isNaN(data[1]) || isNaN(data[2])) {
       return penguin.disconnect()
     }
@@ -41,15 +41,15 @@ module.exports = {
       return penguin.sendXt('jg', roomId)
     }
 
-    try {
-      const room = await penguin.getRoomById(roomId)
+    const room = penguin.getRoomById(roomId)
 
+    if (room) {
       if (penguin.isRoomFull(roomId)) {
         return penguin.sendError(210)
       }
 
       penguin.joinRoom(room, data[1], data[2])
-    } catch (err) {
+    } else {
       penguin.sendError(213)
     }
   },
@@ -58,7 +58,7 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleJoinPlayer: async (data, penguin) => {
+  handleJoinPlayer: (data, penguin) => {
     if (data.length !== 3 || isNaN(data[0]) || isNaN(data[1]) || isNaN(data[2])) {
       return penguin.disconnect()
     }
@@ -69,15 +69,15 @@ module.exports = {
 
     penguin.createIgloo(roomId)
 
-    try {
-      const room = await penguin.getRoomById(roomId)
+    const room = penguin.getRoomById(roomId)
 
+    if (room) {
       if (penguin.isRoomFull(roomId)) {
         return penguin.sendError(210)
       }
 
       penguin.joinRoom(room, data[1], data[2])
-    } catch (err) {
+    } else {
       penguin.sendError(10011)
     }
   },
