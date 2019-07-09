@@ -68,9 +68,14 @@ module.exports = {
       }
 
       const loginkey = await randomBytes(15).toString('hex')
+      const online = await penguin.server.database.knex('population').select('online')
+
+      const pop = parseInt(online[0].online)
+      const max = config.WORLD.MAX
+      const bars = pop >= max ? 6 : Math.round(pop * 5 / max)
 
       await penguin.updateColumn(username, 'loginkey', loginkey)
-      penguin.sendXt('l', result.id, loginkey, '', '100,5')
+      penguin.sendXt('l', result.id, loginkey, '', `100,${bars}`)
     } else {
       if (!result.loginkey) {
         return penguin.server.removePenguin(penguin)

@@ -9,10 +9,12 @@ module.exports = {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  handleJoinServer: (data, penguin) => {
+  handleJoinServer: async (data, penguin) => {
     if (data.length !== 3 || parseInt(data[0]) !== penguin.id || data[1] !== penguin.loginkey || penguin.inWorld) {
       return penguin.disconnect()
     }
+
+    await penguin.server.database.knex('population').increment('online', 1)
 
     penguin.sendXt('js', 0, 0, Number(penguin.moderator), 0)
     penguin.sendXt('gps', penguin.id, '')
