@@ -33,6 +33,8 @@ module.exports = class Penguin {
    * @param {Object} result
    */
   async setPenguin(result) {
+    this.server.penguins[result.id] = this
+
     const date = new Date().toISOString().split('T')[0].split('-').join('')
 
     delete result.password
@@ -213,7 +215,7 @@ module.exports = class Penguin {
    * Go offline if we have buddies
    */
   buddyOffline() {
-    if (Object.keys(this.buddies).length > 0) {
+    if (this.buddies && Object.keys(this.buddies).length > 0) {
       for (const buddyId in this.buddies) {
         const buddyObj = this.server.getPenguinById(buddyId)
 

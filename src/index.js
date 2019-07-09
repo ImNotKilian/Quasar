@@ -35,14 +35,8 @@ const validateServerConfig = () => {
 
   if (config.LOGIN.PORT === config.WORLD.PORT) throw new Error('Invalid port duplication')
 
-  if (!config.LOGIN.MAX) throw new Error('Missing max for login')
-  if (!config.WORLD.MAX) throw new Error('Missing max for world')
-
-  if (isNaN(config.LOGIN.MAX)) throw new Error('Invalid max for login')
-  if (isNaN(config.WORLD.MAX)) throw new Error('Invalid max for world')
-
-  if (config.LOGIN.MAX <= 0) throw new Error('Invalid max range for login')
-  if (config.WORLD.MAX <= 0) throw new Error('Invalid max range for world')
+  if (!config.WORLD.MAX) throw new Error('Missing max penguins for world')
+  if (isNaN(config.WORLD.MAX)) throw new Error('Invalid max penguins for world')
 }
 
 /**

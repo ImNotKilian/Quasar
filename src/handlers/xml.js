@@ -69,15 +69,11 @@ module.exports = {
 
       const loginkey = await randomBytes(15).toString('hex')
 
-      const pop = penguin.server.penguins.length
-      const max = penguin.server.config.MAX
-      const bars = pop >= max ? 6 : Math.round(pop * 5 / max)
-
       await penguin.updateColumn(username, 'loginkey', loginkey)
-      penguin.sendXt('l', result.id, loginkey, '', `100,${bars}`)
+      penguin.sendXt('l', result.id, loginkey, '', '100,5')
     } else {
-      if (!result.loginkey || penguin.server.isPenguinOnline(result.id)) {
-        return penguin.disconnect()
+      if (!result.loginkey) {
+        return penguin.server.removePenguin(penguin)
       }
 
       let hash = await createHash('md5').update(result.loginkey + config.KEY).digest('hex')
@@ -87,12 +83,17 @@ module.exports = {
         return penguin.sendError(101, true)
       }
 
-      if (Boolean(result.ban)) {
-        return penguin.sendError(603, true)
+      if (penguin.server.isPenguinOnline(result.id)) {
+        penguin.server.penguins[result.id].sendError(3, true)
+        penguin.sendError(3, true)
+      } else {
+        if (Object.keys(penguin.server.penguins).length >= config.WORLD.MAX) {
+          penguin.sendError(103, true)
+        } else {
+          await penguin.setPenguin(result)
+          penguin.sendXt('l', 'Zaseth')
+        }
       }
-
-      await penguin.setPenguin(result)
-      penguin.sendXt('l', 'Zaseth')
     }
   }
 }

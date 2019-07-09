@@ -15,9 +15,9 @@ module.exports = class Server {
   constructor() {
     /**
      * The connected penguins
-     * @type {Array<Penguin>}
+     * @type {Object<Penguin>}
      */
-    this.penguins = []
+    this.penguins = {}
     /**
      * The config for the current server
      * @type {Object}
@@ -48,7 +48,7 @@ module.exports = class Server {
    * Start a new server
    */
   startServer() {
-    const { HOST, PORT, MAX } = this.config
+    const { HOST, PORT } = this.config
 
     if (isIP(HOST) !== 4) {
       logger.error('Quasar has detected an invalid host and will now be killed')
@@ -59,14 +59,7 @@ module.exports = class Server {
       socket.setTimeout(600000)
       socket.setEncoding('utf8')
 
-      if (this.penguins.length >= MAX) {
-        socket.end()
-        socket.destroy()
-        return
-      }
-
       const penguin = new Penguin(this, socket)
-      this.penguins.push(penguin)
       logger.info('A penguino connected')
 
       socket.on('data', (data) => network.handleData(data, penguin))
@@ -81,16 +74,14 @@ module.exports = class Server {
    * @param {Penguin} penguin
    */
   removePenguin(penguin) {
-    const idx = this.penguins.indexOf(penguin)
-
-    if (idx > -1) {
-      this.penguins.splice(idx, 1)
-
-      penguin.socket.end()
-      penguin.socket.destroy()
-
-      logger.info('A penguino disconnected')
+    if (this.penguins[penguin.id]) {
+      delete this.penguins[penguin.id]
     }
+
+    penguin.socket.end()
+    penguin.socket.destroy()
+
+    logger.info('A penguino disconnected')
   }
 
   /**
@@ -99,13 +90,7 @@ module.exports = class Server {
    * @returns {Object}
    */
   getPenguinById(id) {
-    for (let i = 0; i < this.penguins.length; i++) {
-      const penguin = this.penguins[i]
-
-      if (penguin.id && penguin.id === parseInt(id)) {
-        return penguin
-      }
-    }
+    return this.penguins[parseInt(id)]
   }
 
   /**
@@ -114,12 +99,8 @@ module.exports = class Server {
    * @returns {Boolean}
    */
   isPenguinOnline(id) {
-    for (let i = 0; i < this.penguins.length; i++) {
-      const penguin = this.penguins[i]
-
-      if (penguin.id && penguin.id === parseInt(id)) {
-        return true
-      }
+    if (this.penguins[parseInt(id)]) {
+      return true
     }
 
     return false

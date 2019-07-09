@@ -9,7 +9,7 @@ module.exports = {
 
   REGISTER: { HOST: '127.0.0.1', PORT: 1337 },
 
-  LOGIN: { HOST: '127.0.0.1', PORT: 6112, MAX: 100 },
+  LOGIN: { HOST: '127.0.0.1', PORT: 6112 },
 
   WORLD: { HOST: '127.0.0.1', PORT: 9875, MAX: 200 },
 
