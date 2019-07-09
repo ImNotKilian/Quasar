@@ -11,7 +11,6 @@ module.exports = {
    */
   handleHeartBeat: (data, penguin) => {
     penguin.sendXt('h')
-    penguin.minutesPlayed += 1
   },
   /**
    * Handle u#sp

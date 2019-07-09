@@ -256,13 +256,11 @@ module.exports = class Penguin {
   /**
    * Disconnects the penguin
    */
-  async disconnect() {
+  disconnect() {
     if (serverType !== 'LOGIN') {
       this.removeFromRoom()
       this.closeIgloo()
       this.buddyOffline()
-
-      await this.updateColumn(this.id, 'minutesPlayed', this.minutesPlayed)
     }
 
     this.server.removePenguin(this)
