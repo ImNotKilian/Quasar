@@ -35,10 +35,11 @@ app.post('/registerPost', async (req, res) => {
       color = parseInt(color)
 
       const matches = username.match(/^[a-zA-Z0-9 ]+$/)
+      const allowedColors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15]
 
       if (username.length >= 4 && username.length <= 12 && matches) {
         if (password.length >= 4 && password.length <= 12) {
-          if (color >= 1 && color <= 13) {
+          if (allowedColors.indexOf(color) > -1) {
             try {
               password = await hashPassword(password)
 
