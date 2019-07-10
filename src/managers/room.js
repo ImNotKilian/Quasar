@@ -32,7 +32,7 @@ module.exports = class RoomManager {
         const roomObj = rooms[id]
 
         roomObj.id = parseInt(id)
-        roomObj.penguins = []
+        roomObj.penguins = {}
 
         this.rooms[id] = new Room(roomObj)
       }
@@ -47,7 +47,7 @@ module.exports = class RoomManager {
    */
   createIgloo(id) {
     if (!this.rooms[id]) {
-      this.rooms[id] = new Room({ id, penguins: [], name: `Igloo#${id}`, max: 30 })
+      this.rooms[id] = new Room({ id, penguins: {}, name: `Igloo#${id}`, max: 30 })
     }
   }
 
@@ -105,7 +105,7 @@ module.exports = class RoomManager {
     const room = this.getRoomById(id)
 
     if (room) {
-      return room.penguins.length >= room.max
+      return Object.keys(room.penguins).length >= room.max
     }
   }
 }

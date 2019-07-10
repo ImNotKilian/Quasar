@@ -30,7 +30,7 @@ module.exports = class Room {
     penguin.x = parseInt(x) || ~~(Math.random() * 200)
     penguin.y = parseInt(y) || ~~(Math.random() * 200)
 
-    this.penguins.push(penguin)
+    this.penguins[penguin.id] = penguin
 
     this.sendXt('ap', penguin.buildString())
 
@@ -38,7 +38,7 @@ module.exports = class Room {
       penguin.sendXt('jp', this.id)
     }
 
-    this.penguins.length > 0 ? penguin.sendXt('jr', this.id, this.buildString()) : penguin.sendXt('jr', this.id)
+    Object.keys(this.penguins).length > 0 ? penguin.sendXt('jr', this.id, this.buildString()) : penguin.sendXt('jr', this.id)
   }
 
   /**
@@ -48,8 +48,10 @@ module.exports = class Room {
   buildString() {
     let str = ''
 
-    for (let i = 0; i < this.penguins.length; i++) {
-      str += `%${this.penguins[i].buildString()}`
+    for (const id in this.penguins) {
+      const penguin = this.penguins[id]
+
+      str += `%${penguin.buildString()}`
     }
 
     return str.substr(1)
@@ -60,8 +62,12 @@ module.exports = class Room {
    * @param {String} data
    */
   send(data) {
-    for (let i = 0; i < this.penguins.length; i++) {
-      this.penguins.length === 1 ? this.penguins[i].send(data, true) : this.penguins[i].send(data, i === 0)
+    logger.outgoing(data)
+
+    for (const id in this.penguins) {
+      const penguin = this.penguins[id]
+
+      penguin.send(data, false)
     }
   }
 
@@ -80,10 +86,8 @@ module.exports = class Room {
    * @param {Penguin} penguin
    */
   removePenguin(penguin) {
-    const idx = this.penguins.indexOf(penguin)
-
-    if (idx > -1) {
-      this.penguins.splice(idx, 1)
+    if (this.penguins[penguin.id]) {
+      delete this.penguins[penguin.id]
 
       this.sendXt('rp', penguin.id)
     }
