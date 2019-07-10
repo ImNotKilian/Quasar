@@ -15,7 +15,7 @@ module.exports = class Server {
   constructor() {
     /**
      * The connected penguins
-     * @type {Object<Penguin>}
+     * @type {Object}
      */
     this.penguins = {}
     /**
