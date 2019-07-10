@@ -70,7 +70,7 @@ module.exports = {
       const loginkey = await randomBytes(15).toString('hex')
 
       await penguin.updateColumn(username, 'loginkey', loginkey)
-      penguin.sendXt('l', result.id, loginkey, '', `100,5`)
+      penguin.sendXt('l', result.id, loginkey, '', '100,5')
     } else {
       if (!result.loginkey) {
         return penguin.server.removePenguin(penguin)
