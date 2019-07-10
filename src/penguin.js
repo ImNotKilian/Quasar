@@ -258,10 +258,8 @@ module.exports = class Penguin {
   /**
    * Disconnects the penguin
    */
-  async disconnect() {
+  disconnect() {
     if (serverType !== 'LOGIN') {
-      await this.server.database.knex('population').decrement('online', 1)
-
       this.removeFromRoom()
       this.closeIgloo()
       this.buddyOffline()

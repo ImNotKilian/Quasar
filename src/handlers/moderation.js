@@ -42,7 +42,7 @@ module.exports = {
     }
   },
   /**
-   * Add a ban
+   * Ban a penguin
    * @param {Array} data
    * @param {Penguin} penguin
    */

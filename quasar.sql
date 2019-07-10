@@ -2,15 +2,6 @@ DROP DATABASE IF EXISTS `quasar`;
 CREATE DATABASE `quasar`;
 USE `quasar`;
 
-DROP TABLE IF EXISTS `population`;
-CREATE TABLE `population` (
-    `online` INT(10) UNSIGNED NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-LOCK TABLES `population` WRITE;
-INSERT INTO `population` VALUES (0);
-UNLOCK TABLES;
-
 DROP TABLE IF EXISTS `penguins`;
 CREATE TABLE `penguins` (
     `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Penguin id',
@@ -95,8 +86,3 @@ CREATE TRIGGER `insert_color`
   AFTER INSERT ON `penguins`
   FOR EACH ROW
   INSERT INTO `inventory` VALUES (NEW.id, NEW.color);
-
-CREATE TRIGGER `insert_mail`
-  AFTER INSERT ON `penguins`
-  FOR EACH ROW
-  INSERT INTO `mail` (`senderId`, `senderName`, `recipientId`, `type`, `date`) VALUES ('100', 'Zaseth', NEW.id, 125, UNIX_TIMESTAMP());
