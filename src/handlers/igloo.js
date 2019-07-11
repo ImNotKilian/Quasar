@@ -39,5 +39,38 @@ module.exports = {
     const id = parseInt(data[0])
 
     // Todo
+  },
+  /**
+   * Open an igloo
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleOpenIgloo: (data, penguin) => {
+    if (data.length !== 2 || isNaN(data[0])) {
+      return penguin.disconnect()
+    }
+
+    const iglooId = parseInt(data[0])
+    const username = data[1]
+
+    if (iglooId === penguin.id && penguin.room && username === penguin.username) {
+      penguin.room.open = true
+    }
+  },
+  /**
+   * Close an igloo
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleCloseIgloo: (data, penguin) => {
+    if (data.length !== 1 || isNaN(data[0])) {
+      return penguin.disconnect()
+    }
+
+    const iglooId = parseInt(data[0])
+
+    if (iglooId === penguin.id && penguin.room) {
+      penguin.room.open = false
+    }
   }
 }

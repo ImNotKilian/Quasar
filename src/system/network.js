@@ -69,6 +69,8 @@ const xtHandlers = {
 
     'g#gr': { klass: 'igloo', func: 'handleGetIglooList' },
     'g#gm': { klass: 'igloo', func: 'handleGetIgloo' },
+    'g#or': { klass: 'igloo', func: 'handleOpenIgloo' },
+    'g#cr': { klass: 'igloo', func: 'handleCloseIgloo' },
 
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
