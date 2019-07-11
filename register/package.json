@@ -12,7 +12,7 @@
     "fastify": "^2.6.0",
     "fastify-formbody": "^3.1.0",
     "fastify-static": "^2.5.0",
-    "knex": "^0.18.1",
+    "knex": "^0.18.4",
     "mysql2": "^1.6.5"
   }
 }
