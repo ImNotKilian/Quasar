@@ -24,7 +24,7 @@ module.exports = {
       }
     }
 
-    iglooStr.length > 1 ? penguin.sendXt('gr', iglooStr.substr(1)) : penguin.sendXt('gr')
+    penguin.sendXt('gr', iglooStr.substr(1))
   },
   /**
    * Retrieve an igloo
