@@ -48,7 +48,7 @@ module.exports = {
         return penguin.sendError(210)
       }
 
-      penguin.joinRoom(room, data[1], data[2])
+      penguin.joinRoom(room, parseInt(data[1]), parseInt(data[2]))
     } else {
       penguin.sendError(213)
     }
