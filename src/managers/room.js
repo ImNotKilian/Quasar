@@ -47,7 +47,7 @@ module.exports = class RoomManager {
    */
   createIgloo(id) {
     if (!this.rooms[id]) {
-      this.rooms[id] = new Room({ id, penguins: {}, name: `Igloo#${id}`, max: 30 })
+      this.rooms[id] = new Room({ id, penguins: {}, name: `Igloo#${id}`, open: false, max: 30 })
     }
   }
 
