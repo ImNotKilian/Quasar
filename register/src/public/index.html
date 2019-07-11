@@ -1,55 +1,81 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Register</title>
 
-  <style>
-    img {
-      position: absolute;
-      left: 180px;
-      top: -25px;
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script>
-    function updatePenguin() {
-      var e = document.getElementById("color");
-      var color = e.options[e.selectedIndex].value;
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-      document.getElementById("colorDisp").src = "./colors/" + color + ".png";
+  <script type="text/javascript">
+    function randomTip() {
+      var tips = [
+        'Never share your password with anyone.',
+        'Never use the same password.',
+        'A random password is a happy password.',
+        'Your password can contain a max length of 12.',
+        'Special characters are special.',
+        'Capital letters are letters as well.',
+        'Numbers are kind of special.',
+        'You can choose which color your penguin will be.'
+      ];
+
+      document.getElementById('tip').innerHTML = tips[Math.floor(Math.random() * tips.length)];
     }
   </script>
 </head>
 
-<body>
-  <img id="colorDisp" src="./colors/1.png" />
+<body onload="randomTip();">
+  <section id="cover">
+    <div id="cover-caption">
+      <div id="container" class="container">
+        <div class="row text-black">
+          <div class="col-sm-6 offset-sm-3 text-center">
+            <h1 class="display-4">Register your penguin</h1>
+            <div class="info-form">
+              <form action="/registerPost" method="POST"
+                class="form-inlin justify-content-center shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="form-group">
+                  <input type="text" name="username" class="form-control" placeholder="Username" minlength="4"
+                    maxlength="12" required>
+                </div>
 
-  <form method="POST" action="/registerPost">
-    Username:<br><input type="text" name="username" minlength="4" maxlength="12" required><br>
-    Password:<br><input type="password" name="password" minlength="4" maxlength="12" required><br>
-    Color: <select onchange="updatePenguin();" id="color" name="color">
-      <option value="1">Blue</option>
-      <option value="2">Green</option>
-      <option value="3">Pink</option>
-      <option value="4">Black</option>
-      <option value="5">Red</option>
-      <option value="6">Orange</option>
-      <option value="7">Yellow</option>
-      <option value="8">Dark Purple</option>
-      <option value="9">Brown</option>
-      <option value="10">Peach</option>
-      <option value="11">Dark Green</option>
-      <option value="12">Light Blue</option>
-      <option value="13">Lime Green</option>
-      <option value="15">Aqua</option>
-    </select><br>
+                <div class="form-group">
+                  <input type="password" name="password" class="form-control" placeholder="Password" minlength="4"
+                    maxlength="12" required>
+                </div>
 
-    <input type="submit" value="Register">
-  </form>
+                <div class="form-group">
+                  <select class="form-control" name="color" required>
+                    <option value="1">Blue</option>
+                    <option value="2">Green</option>
+                    <option value="3">Pink</option>
+                    <option value="4">Black</option>
+                    <option value="5">Red</option>
+                    <option value="6">Orange</option>
+                    <option value="7">Yellow</option>
+                    <option value="8">Dark Purple</option>
+                    <option value="9">Brown</option>
+                    <option value="10">Peach</option>
+                    <option value="11">Dark Green</option>
+                    <option value="12">Light Blue</option>
+                    <option value="13">Lime Green</option>
+                    <option value="15">Aqua</option>
+                  </select>
+                </div>
+
+                <div class="alert alert-success" id="tip" role="alert"></div>
+
+                <button type="submit" class="btn btn-primary">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 
 </html>
