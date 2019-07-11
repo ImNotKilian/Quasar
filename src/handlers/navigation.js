@@ -59,7 +59,7 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleJoinPlayer: (data, penguin) => {
-    if (data.length !== 3 || isNaN(data[0]) || isNaN(data[1]) || isNaN(data[2])) {
+    if (isNaN(data[0])) {
       return penguin.disconnect()
     }
 
@@ -76,7 +76,7 @@ module.exports = {
         return penguin.sendError(210)
       }
 
-      penguin.joinRoom(room, parseInt(data[1]), parseInt(data[2]))
+      penguin.joinRoom(room)
     } else {
       penguin.sendError(10011)
     }
