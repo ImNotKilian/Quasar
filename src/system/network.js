@@ -67,6 +67,9 @@ const xtHandlers = {
     'l#md': { klass: 'mail', func: 'handleDeleteMail' },
     'l#mdp': { klass: 'mail', func: 'handleDeleteMailFromPenguin' },
 
+    'g#gr': { klass: 'igloo', func: 'handleGetIglooList' },
+    'g#gm': { klass: 'igloo', func: 'handleGetIgloo' },
+
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   },
