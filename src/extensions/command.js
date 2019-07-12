@@ -5,17 +5,19 @@
  * @constant
  */
 const commands = {
-  'ping': { 'enabled': true, 'func': 'botPing', 'len': 0, 'mod': false },
-  'id': { 'enabled': true, 'func': 'getId', 'len': 0, 'mod': false },
-  'online': { 'enabled': true, 'func': 'getOnlineCount', 'len': 0, 'mod': false },
-  'find': { 'enabled': true, 'func': 'findPenguin', 'len': 1, 'mod': true },
-  'jr': { 'enabled': true, 'func': 'joinRoom', 'len': 1, 'mod': true },
-  'ai': { 'enabled': true, 'func': 'addItem', 'len': 1, 'mod': true },
-  'ac': { 'enabled': true, 'func': 'addCoins', 'len': 1, 'mod': true },
-  'rc': { 'enabled': true, 'func': 'removeCoins', 'len': 1, 'mod': true },
-  'tp': { 'enabled': true, 'func': 'teleportTo', 'len': 1, 'mod': true },
-  'kick': { 'enabled': true, 'func': 'kickPenguin', 'len': 1, 'mod': true },
-  'uo': { 'enabled': true, 'func': 'updateOutfit', 'len': 2, 'mod': true }
+  'ping': { enabled: true, func: 'botPing', len: 0, mod: false },
+  'id': { enabled: true, func: 'getId', len: 0, mod: false },
+  'online': { enabled: true, func: 'getOnlineCount', len: 0, mod: false },
+  'find': { enabled: true, func: 'findPenguin', len: 1, mod: true },
+  'jr': { enabled: true, func: 'joinRoom', len: 1, mod: true },
+  'ai': { enabled: true, func: 'addItem', len: 1, mod: true },
+  'ac': { enabled: true, func: 'addCoins', len: 1, mod: true },
+  'rc': { enabled: true, func: 'removeCoins', len: 1, mod: true },
+  'tp': { enabled: true, func: 'teleportTo', len: 1, mod: true },
+  'kick': { enabled: true, func: 'kickPenguin', len: 1, mod: true },
+  'mute': { enabled: true, func: 'mutePenguin', len: 1, mod: true },
+  'unmute': { enabled: true, func: 'unmutePenguin', len: 1, mod: true },
+  'uo': { enabled: true, func: 'updateOutfit', len: 2, mod: true }
 }
 
 /**
@@ -176,6 +178,34 @@ module.exports = class {
 
     if (kickObj && kickObj.room) {
       kickObj.sendError(5, true)
+    }
+  }
+
+  /**
+   * Handle the !mute command
+   * @param {String} param
+   * @param {Penguin} penguin
+   */
+  static async mutePenguin(param, penguin) {
+    const muteObj = penguin.server.getPenguin(param)
+
+    if (muteObj && muteObj.room) {
+      muteObj.muted = true
+      await muteObj.updateColumn(muteObj.id, 'muted', Number(muteObj.muted))
+    }
+  }
+
+  /**
+   * Handle the !unmute command
+   * @param {String} param
+   * @param {Penguin} penguin
+   */
+  static async unmutePenguin(param, penguin) {
+    const unmuteObj = penguin.server.getPenguin(param)
+
+    if (unmuteObj && unmuteObj.room) {
+      unmuteObj.muted = false
+      await unmuteObj.updateColumn(unmuteObj.id, 'muted', Number(unmuteObj.muted))
     }
   }
 
