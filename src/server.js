@@ -33,7 +33,7 @@ module.exports = class Server {
      * @type {RoomManager}
      */
     if (serverType === 'WORLD') {
-      this.roomManager = new (require('./managers/room'))
+      this.roomManager = new (require('./managers/roomManager'))
     }
     /**
      * Start a new server
