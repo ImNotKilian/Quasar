@@ -111,6 +111,7 @@ module.exports = class Network {
    */
   static async loadHandlers(callback) {
     const dir = `${process.cwd()}\\src\\handlers\\`
+    const extDir = `${process.cwd()}\\src\\extensions\\`
 
     try {
       if (serverType === 'LOGIN') {
@@ -118,9 +119,38 @@ module.exports = class Network {
       } else {
         const readdirAsync = require('util').promisify(require('fs').readdir)
         const handlers = await readdirAsync(dir)
+        const extensions = await readdirAsync(extDir)
 
+        // Load handler classes
         for (let i = 0; i < handlers.length; i++) {
           classHandlers[handlers[i].split('.')[0]] = require(`${dir}${handlers[i]}`)
+        }
+
+        // Load extension classes
+        for (let i = 0; i < extensions.length; i++) {
+          const file = extensions[i].split('.')[0]
+
+          if (config.EXTENSIONS[file].enabled) {
+            classHandlers[file] = require(`${extDir}${extensions[i]}`)
+          }
+        }
+
+        // Overwrite handler with extension
+        if (extensions.length > 0) {
+          for (const extensionName in config.EXTENSIONS) {
+            const extension = config.EXTENSIONS[extensionName]
+
+            const { handler, func } = extension
+
+            if (extension.enabled) {
+              if (xtHandlers['s'][handler]) {
+                const xtHandler = xtHandlers['s'][handler]
+
+                xtHandler['klass'] = extensionName
+                xtHandler['func'] = func
+              }
+            }
+          }
         }
       }
     } catch (err) {
