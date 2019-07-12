@@ -243,7 +243,7 @@ module.exports = class Penguin {
    * @returns {Room}
    */
   getRoomById(id) {
-    return this.server.roomManager.getRoomById(id)
+    return this.server.roomManager.getRoomById(parseInt(id))
   }
 
   /**
@@ -252,7 +252,7 @@ module.exports = class Penguin {
    * @returns {Boolean}
    */
   isRoomFull(id) {
-    return this.server.roomManager.isRoomFull(id)
+    return this.server.roomManager.isRoomFull(parseInt(id))
   }
 
   /**
