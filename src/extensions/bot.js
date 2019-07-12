@@ -7,13 +7,6 @@
  */
 module.exports = class Bot {
   /**
-   * @constructor
-   */
-  constructor() {
-
-  }
-
-  /**
    * Build the bot string
    * @returns {String}
    */
