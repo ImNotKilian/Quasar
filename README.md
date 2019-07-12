@@ -11,6 +11,10 @@ npm start login
 npm start world
 ```
 
+# Known issues
+
+- The disconnect log will appear twice (Nothing serious)
+
 # Suggestions or issues?
 
 Don't be scared to make a new issue, even for suggestions! I will try my best and look at everything.
