@@ -83,18 +83,14 @@ module.exports = {
         return penguin.sendError(101, true)
       }
 
-      if (penguin.server.isPenguinOnline(result.id)) {
-        penguin.server.penguins[result.id].socket.end()
-        penguin.server.penguins[result.id].socket.destroy()
-        delete penguin.server.penguins[result.id]
+      const penguinObj = penguin.server.getPenguinById(result.id)
 
-        penguin.socket.end()
-        penguin.socket.destroy()
+      if (penguinObj) {
+        penguinObj.disconnect()
+        penguin.disconnect()
       } else {
         if (Object.keys(penguin.server.penguins).length >= config.WORLD.MAX) {
-          penguin.sendError(103)
-          penguin.socket.end()
-          penguin.socket.destroy()
+          penguin.sendError(103, true)
         } else {
           await penguin.setPenguin(result)
           penguin.sendXt('l', 'Zaseth')
