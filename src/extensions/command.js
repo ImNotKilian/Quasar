@@ -10,7 +10,8 @@ const commands = {
   'ac': { 'enabled': true, 'func': 'addCoins', 'len': 1, mod: true },
   'rc': { 'enabled': true, 'func': 'removeCoins', 'len': 1, mod: true },
   'teleport': { 'enabled': true, 'func': 'teleportTo', 'len': 1, mod: true },
-  'kick': { 'enabled': true, 'func': 'kickPenguin', 'len': 1, mod: true }
+  'kick': { 'enabled': true, 'func': 'kickPenguin', 'len': 1, mod: true },
+  'uo': { 'enabled': true, 'func': 'updateOutfit', 'len': 2, mod: true }
 }
 
 /**
@@ -24,35 +25,15 @@ module.exports = class {
    * @param {Array} data
    * @param {Penguin} penguin
    */
-  static handleCommand(data, penguin) {
-    if (data.length !== 2 || isNaN(data[0]) || !penguin.room) {
-      return penguin.disconnect()
-    }
+  static handleCommand(message, penguin) {
+    const args = message.substr(1).split(' ')
+    const command = args.shift()
 
-    const [id, message] = [parseInt(data[0]), data[1]]
+    if (commands[command] && commands[command].enabled) {
+      const { func, len, mod } = commands[command]
 
-    if (id !== penguin.id) {
-      return penguin.disconnect()
-    }
-
-    if (message.length <= 0 || message.length > 48) {
-      return penguin.sendError(5, true)
-    }
-
-    if (!penguin.muted) {
-      if (message.charAt(0) === '!') {
-        const args = message.substr(1).split(' ')
-        const command = args.shift()
-
-        if (commands[command] && commands[command].enabled) {
-          const { func, len, mod } = commands[command]
-
-          if (args.length === len && penguin.moderator === mod) {
-            this[func](len === 1 ? args[0] : args, penguin)
-          }
-        }
-      } else {
-        penguin.room.sendXt('sm', penguin.id, message)
+      if (args.length === len && penguin.moderator === mod) {
+        this[func](len === 1 ? args[0] : args, penguin)
       }
     }
   }
@@ -147,6 +128,26 @@ module.exports = class {
       if (kickObj && kickObj.room) {
         kickObj.sendError(5, true)
       }
+    }
+  }
+
+  /**
+   * Handle the !uo command
+   * Note: The item is not added to inventory
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  static async updateOutfit(data, penguin) {
+    const [type, itemId] = data
+    const types = ['color', 'head', 'face', 'neck', 'body', 'hand', 'feet', 'flag', 'photo']
+
+    if (types.indexOf(type) > -1) {
+      const room = penguin.room
+
+      await penguin.updateOutfit(type, parseInt(itemId))
+
+      penguin.removeFromRoom()
+      penguin.joinRoom(room)
     }
   }
 }

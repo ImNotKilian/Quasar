@@ -7,9 +7,8 @@
 module.exports = {
   KEY: 'Quasar',
 
-  EXTENSIONS: {
-    'command': { 'enabled': true, 'handler': 'm#sm', 'func': 'handleCommand' }
-  },
+  EXTENSIONS_ENABLED: ['command'],
+  EXTENSIONS_DISABLED: [],
 
   REGISTER: { HOST: '127.0.0.1', PORT: 1337 },
 

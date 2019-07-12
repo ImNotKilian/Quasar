@@ -182,7 +182,11 @@ module.exports = {
     }
 
     if (!penguin.muted) {
-      penguin.room.sendXt('sm', penguin.id, message)
+      if (message.charAt(0) === '!' && penguin.server.extensionManager.isExtensionEnabled('command')) {
+        penguin.server.extensionManager.getExtension('command').handleCommand(message, penguin)
+      } else {
+        penguin.room.sendXt('sm', penguin.id, message)
+      }
     }
   },
   /**
