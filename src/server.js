@@ -19,6 +19,16 @@ module.exports = class Server {
      */
     this.penguins = {}
     /**
+     * Store ids by username
+     * @type {Object}
+     */
+    this.idsByUsername = {}
+    /**
+     * Store usernames by id
+     * @type {Object}
+     */
+    this.usernamesById = {}
+    /**
      * The config for the current server
      * @type {Object}
      */
@@ -90,6 +100,14 @@ module.exports = class Server {
       delete this.penguins[penguin.id]
     }
 
+    if (this.idsByUsername[penguin.id]) {
+      delete this.idsByUsername[penguin.id]
+    }
+
+    if (this.usernamesById[penguin.username]) {
+      delete this.usernamesById[penguin.username]
+    }
+
     penguin.socket.end()
     penguin.socket.destroy()
 
@@ -103,6 +121,24 @@ module.exports = class Server {
    */
   getPenguinById(id) {
     return this.penguins[parseInt(id)]
+  }
+
+  /**
+   * Retrieves a penguin by their username
+   * @param {String} username
+   * @returns {Object}
+   */
+  getPenguinByUsername(username) {
+    return this.getPenguinById(this.usernamesById[username.toLowerCase()])
+  }
+
+  /**
+   * Retrieves a penguin and decide whether it's a username or id
+   * @param {String|Number} param
+   * @returns {Object}
+   */
+  getPenguin(param) {
+    return isNaN(param) ? this.getPenguinByUsername(param) : this.getPenguinById(param)
   }
 
   /**
