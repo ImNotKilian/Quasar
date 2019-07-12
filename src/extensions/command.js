@@ -14,9 +14,11 @@ const commands = {
   'ac': { enabled: true, func: 'addCoins', len: 1, mod: true },
   'rc': { enabled: true, func: 'removeCoins', len: 1, mod: true },
   'tp': { enabled: true, func: 'teleportTo', len: 1, mod: true },
+  'summon': { enabled: true, func: 'summonPenguin', len: 1, mod: true },
+  'summonto': { enabled: true, func: 'summonPenguinTo', len: 2, mod: true },
   'kick': { enabled: true, func: 'kickPenguin', len: 1, mod: true },
   'mute': { enabled: true, func: 'mutePenguin', len: 1, mod: true },
-  'unmute': { enabled: true, func: 'unmutePenguin', len: 1, mod: true },
+  'ban': { enabled: true, func: 'banPenguin', len: 1, mod: true },
   'uo': { enabled: true, func: 'updateOutfit', len: 2, mod: true }
 }
 
@@ -169,6 +171,39 @@ module.exports = class {
   }
 
   /**
+   * Handle the !summon command
+   * @param {String} param
+   * @param {Penguin} penguin
+   */
+  static summonPenguin(param, penguin) {
+    const summonObj = penguin.server.getPenguin(param)
+
+    if (summonObj && summonObj.room && !penguin.isRoomFull(penguin.room.id)) {
+      summonObj.removeFromRoom()
+      summonObj.joinRoom(penguin.room)
+    }
+  }
+
+  /**
+   * Handle the !summonto command
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  static summonPenguinTo(data, penguin) {
+    const [param, roomId] = data
+    const summonObj = penguin.server.getPenguin(param)
+
+    if (summonObj && summonObj.room) {
+      const room = penguin.getRoomById(roomId)
+
+      if (room && !penguin.isRoomFull(roomId)) {
+        summonObj.removeFromRoom()
+        summonObj.joinRoom(room)
+      }
+    }
+  }
+
+  /**
    * Handle the !kick command
    * @param {String} param
    * @param {Penguin} penguin
@@ -196,16 +231,16 @@ module.exports = class {
   }
 
   /**
-   * Handle the !unmute command
+   * Handle the !ban command
    * @param {String} param
    * @param {Penguin} penguin
    */
-  static async unmutePenguin(param, penguin) {
-    const unmuteObj = penguin.server.getPenguin(param)
+  static async banPenguin(param, penguin) {
+    const banObj = penguin.server.getPenguin(param)
 
-    if (unmuteObj && unmuteObj.room) {
-      unmuteObj.muted = false
-      await unmuteObj.updateColumn(unmuteObj.id, 'muted', Number(unmuteObj.muted))
+    if (banObj && banObj.room) {
+      await banObj.updateColumn(banObj.id, 'ban', 1)
+      banObj.sendError(603, true)
     }
   }
 
