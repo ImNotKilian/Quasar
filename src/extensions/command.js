@@ -6,6 +6,7 @@
  */
 const commands = {
   'ping': { enabled: true, func: 'botPing', len: 0, mod: false },
+  'fullest': { enabled: true, func: 'fullestRoom', len: 0, mod: false },
   'id': { enabled: true, func: 'getId', len: 0, mod: false },
   'online': { enabled: true, func: 'getOnlineCount', len: 0, mod: false },
   'find': { enabled: true, func: 'findPenguin', len: 1, mod: true },
@@ -59,6 +60,21 @@ module.exports = class {
     const bot = penguin.server.extensionManager.getExtension('bot')
 
     bot.sendMessage('Pong!', penguin)
+  }
+
+  /**
+   * Handle the !fullest command
+   * @param {undefined} nothing
+   * @param {Penguin} penguin
+   */
+  static fullestRoom(nothing, penguin) {
+    const bot = penguin.server.extensionManager.getExtension('bot')
+
+    const rooms = penguin.server.roomManager.rooms
+    const sizes = Object.keys(rooms).sort((a, b) => Object.keys(rooms[b].penguins).length - Object.keys(rooms[a].penguins).length)
+    const room = penguin.getRoomById(sizes[0])
+
+    bot.sendMessage(`The fullest room is ${room.name} with ${Object.keys(room.penguins).length} penguino's`, penguin)
   }
 
   /**
