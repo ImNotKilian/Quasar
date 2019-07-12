@@ -13,7 +13,7 @@ const commands = {
   'ai': { 'enabled': true, 'func': 'addItem', 'len': 1, 'mod': true },
   'ac': { 'enabled': true, 'func': 'addCoins', 'len': 1, 'mod': true },
   'rc': { 'enabled': true, 'func': 'removeCoins', 'len': 1, 'mod': true },
-  'teleport': { 'enabled': true, 'func': 'teleportTo', 'len': 1, 'mod': true },
+  'tp': { 'enabled': true, 'func': 'teleportTo', 'len': 1, 'mod': true },
   'kick': { 'enabled': true, 'func': 'kickPenguin', 'len': 1, 'mod': true },
   'uo': { 'enabled': true, 'func': 'updateOutfit', 'len': 2, 'mod': true }
 }
@@ -81,20 +81,16 @@ module.exports = class {
 
   /**
    * Handle the !find command
-   * @param {String} id
+   * @param {String} param
    * @param {Penguin} penguin
    */
-  static findPenguin(id, penguin) {
-    id = parseInt(id)
+  static findPenguin(param, penguin) {
+    const findObj = penguin.server.getPenguin(param)
 
-    if (id !== penguin.id) {
-      const findObj = penguin.server.getPenguinById(id)
+    if (findObj && findObj.room) {
+      const bot = penguin.server.extensionManager.getExtension('bot')
 
-      if (findObj && findObj.room) {
-        const bot = penguin.server.extensionManager.getExtension('bot')
-
-        bot.sendMessage(`${findObj.username} is in ${findObj.room.name}`, penguin)
-      }
+      bot.sendMessage(`${findObj.username} is in ${findObj.room.name}`, penguin)
     }
   }
 
@@ -157,37 +153,29 @@ module.exports = class {
   }
 
   /**
-   * Handle the !teleport command
-   * @param {String} id
+   * Handle the !tp command
+   * @param {String} param
    * @param {Penguin} penguin
    */
-  static teleportTo(id, penguin) {
-    id = parseInt(id)
+  static teleportTo(param, penguin) {
+    const findObj = penguin.server.getPenguin(param)
 
-    if (id !== penguin.id) {
-      const findObj = penguin.server.getPenguinById(id)
-
-      if (findObj && findObj.room && !findObj.isRoomFull(findObj.room.id)) {
-        penguin.removeFromRoom()
-        penguin.joinRoom(findObj.room)
-      }
+    if (findObj && findObj.room && !findObj.isRoomFull(findObj.room.id)) {
+      penguin.removeFromRoom()
+      penguin.joinRoom(findObj.room)
     }
   }
 
   /**
    * Handle the !kick command
-   * @param {String} id
+   * @param {String} param
    * @param {Penguin} penguin
    */
-  static kickPenguin(id, penguin) {
-    id = parseInt(id)
+  static kickPenguin(param, penguin) {
+    const kickObj = penguin.server.getPenguin(param)
 
-    if (id !== penguin.id) {
-      const kickObj = penguin.server.getPenguinById(id)
-
-      if (kickObj && kickObj.room) {
-        kickObj.sendError(5, true)
-      }
+    if (kickObj && kickObj.room) {
+      kickObj.sendError(5, true)
     }
   }
 
