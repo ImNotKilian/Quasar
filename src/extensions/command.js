@@ -5,13 +5,17 @@
  * @constant
  */
 const commands = {
-  'jr': { 'enabled': true, 'func': 'joinRoom', 'len': 1, mod: true },
-  'ai': { 'enabled': true, 'func': 'addItem', 'len': 1, mod: true },
-  'ac': { 'enabled': true, 'func': 'addCoins', 'len': 1, mod: true },
-  'rc': { 'enabled': true, 'func': 'removeCoins', 'len': 1, mod: true },
-  'teleport': { 'enabled': true, 'func': 'teleportTo', 'len': 1, mod: true },
-  'kick': { 'enabled': true, 'func': 'kickPenguin', 'len': 1, mod: true },
-  'uo': { 'enabled': true, 'func': 'updateOutfit', 'len': 2, mod: true }
+  'ping': { 'enabled': true, 'func': 'botPing', 'len': 0, 'mod': false },
+  'id': { 'enabled': true, 'func': 'getId', 'len': 0, 'mod': false },
+  'online': { 'enabled': true, 'func': 'getOnlineCount', 'len': 0, 'mod': false },
+  'find': { 'enabled': true, 'func': 'findPenguin', 'len': 1, 'mod': true },
+  'jr': { 'enabled': true, 'func': 'joinRoom', 'len': 1, 'mod': true },
+  'ai': { 'enabled': true, 'func': 'addItem', 'len': 1, 'mod': true },
+  'ac': { 'enabled': true, 'func': 'addCoins', 'len': 1, 'mod': true },
+  'rc': { 'enabled': true, 'func': 'removeCoins', 'len': 1, 'mod': true },
+  'teleport': { 'enabled': true, 'func': 'teleportTo', 'len': 1, 'mod': true },
+  'kick': { 'enabled': true, 'func': 'kickPenguin', 'len': 1, 'mod': true },
+  'uo': { 'enabled': true, 'func': 'updateOutfit', 'len': 2, 'mod': true }
 }
 
 /**
@@ -29,11 +33,67 @@ module.exports = class {
     const args = message.substr(1).split(' ')
     const command = args.shift()
 
-    if (commands[command] && commands[command].enabled) {
+    if (commands[command] && commands[command].enabled && penguin.server.extensionManager.isExtensionEnabled('bot')) {
       const { func, len, mod } = commands[command]
 
-      if (args.length === len && penguin.moderator === mod) {
-        this[func](len === 1 ? args[0] : args, penguin)
+      if (args.length === len) {
+        if (mod && penguin.moderator) {
+          this[func](len === 1 ? args[0] : args, penguin)
+        } else if (!mod) {
+          this[func](len === 1 ? args[0] : args, penguin)
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle the !ping command
+   * @param {undefined} nothing
+   * @param {Penguin} penguin
+   */
+  static botPing(nothing, penguin) {
+    const bot = penguin.server.extensionManager.getExtension('bot')
+
+    bot.sendMessage('Pong!', penguin)
+  }
+
+  /**
+   * Handle the !id command
+   * @param {undefined} nothing
+   * @param {Penguin} penguin
+   */
+  static getId(nothing, penguin) {
+    const bot = penguin.server.extensionManager.getExtension('bot')
+
+    bot.sendMessage(`Your id is: ${penguin.id}`, penguin)
+  }
+
+  /**
+   * Handle the !online command
+   * @param {undefined} nothing
+   * @param {Penguin} penguin
+   */
+  static getOnlineCount(nothing, penguin) {
+    const bot = penguin.server.extensionManager.getExtension('bot')
+
+    bot.sendMessage(`There are currently ${Object.keys(penguin.server.penguins).length} penguino's online`, penguin)
+  }
+
+  /**
+   * Handle the !find command
+   * @param {String} id
+   * @param {Penguin} penguin
+   */
+  static findPenguin(id, penguin) {
+    id = parseInt(id)
+
+    if (id !== penguin.id) {
+      const findObj = penguin.server.getPenguinById(id)
+
+      if (findObj && findObj.room) {
+        const bot = penguin.server.extensionManager.getExtension('bot')
+
+        bot.sendMessage(`${findObj.username} is in ${findObj.room.name}`, penguin)
       }
     }
   }

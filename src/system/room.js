@@ -39,6 +39,10 @@ module.exports = class Room {
     }
 
     Object.keys(this.penguins).length > 0 ? penguin.sendXt('jr', this.id, this.buildString()) : penguin.sendXt('jr', this.id)
+
+    if (penguin.server.extensionManager.isExtensionEnabled('bot')) {
+      penguin.sendXt('ap', penguin.server.extensionManager.getExtension('bot').buildString())
+    }
   }
 
   /**
