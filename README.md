@@ -13,7 +13,7 @@ npm start world
 
 # Known issues
 
-- The disconnect log will appear twice (Nothing serious)
+- The disconnect log will appear twice in some special instances (Nothing serious)
 
 # Suggestions or issues?
 
