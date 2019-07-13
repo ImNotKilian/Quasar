@@ -584,7 +584,7 @@ module.exports = class {
 
     value = Math.abs(parseInt(value))
 
-    if (value > 100) {
+    if (value > 300) {
       return
     }
 
