@@ -40,7 +40,8 @@ module.exports = class Room {
 
     Object.keys(this.penguins).length > 0 ? penguin.sendXt('jr', this.id, this.buildString()) : penguin.sendXt('jr', this.id)
 
-    if (penguin.server.extensionManager.isExtensionEnabled('bot')) {
+    // Only add the bot when it is enabled and the room is not a game/igloo
+    if (penguin.server.extensionManager.isExtensionEnabled('bot') && this.id < 900) {
       penguin.sendXt('ap', penguin.server.extensionManager.getExtension('bot').buildString())
     }
   }
