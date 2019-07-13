@@ -46,7 +46,7 @@ module.exports = {
     const username = data.split('<nick><![CDATA[')[1].split(']]></nick>')[0]
     const password = data.split('<pword><![CDATA[')[1].split(']]></pword>')[0]
 
-    if (encodeURIComponent(username) !== username) {
+    if (!username.match(/^[a-zA-Z0-9 ]+$/)) {
       return penguin.disconnect()
     }
 

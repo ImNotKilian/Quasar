@@ -5,33 +5,33 @@
  * @constant
  */
 const commands = {
-  'ping': { enabled: true, func: 'botPing', len: 0, mod: false },
-  'fullest': { enabled: true, func: 'fullestRoom', len: 0, mod: false },
-  'id': { enabled: true, func: 'getId', len: 0, mod: false },
-  'online': { enabled: true, func: 'getOnlineCount', len: 0, mod: false },
-  'find': { enabled: true, func: 'findPenguin', len: 1, mod: true },
-  'jr': { enabled: true, func: 'joinRoom', len: 1, mod: true },
-  'ai': { enabled: true, func: 'addItem', len: 1, mod: true },
-  'ac': { enabled: true, func: 'addCoins', len: 1, mod: true },
-  'rc': { enabled: true, func: 'removeCoins', len: 1, mod: true },
-  'tp': { enabled: true, func: 'teleportTo', len: 1, mod: true },
-  'summon': { enabled: true, func: 'summonPenguin', len: 1, mod: true },
-  'summonto': { enabled: true, func: 'summonPenguinTo', len: 2, mod: true },
-  'kick': { enabled: true, func: 'kickPenguin', len: 1, mod: true },
-  'mute': { enabled: true, func: 'mutePenguin', len: 1, mod: true },
-  'ban': { enabled: true, func: 'banPenguin', len: 1, mod: true },
-  'uo': { enabled: true, func: 'updateOutfit', len: 2, mod: true },
-  'ng': { enabled: true, func: 'setNameglow', len: 1, mod: false },
-  'nc': { enabled: true, func: 'setNamecolor', len: 1, mod: false },
-  'bc': { enabled: true, func: 'setBubblecolor', len: 1, mod: false },
-  'bt': { enabled: true, func: 'setBubbletext', len: 1, mod: false },
-  'speed': { enabled: true, func: 'setSpeed', len: 1, mod: false },
+  'ping': { enabled: true, func: 'botPing', mod: false },
+  'fullest': { enabled: true, func: 'fullestRoom', mod: false },
+  'id': { enabled: true, func: 'getId', mod: false },
+  'online': { enabled: true, func: 'getOnlineCount', mod: false },
+  'find': { enabled: true, func: 'findPenguin', mod: true },
+  'jr': { enabled: true, func: 'joinRoom', mod: true },
+  'ai': { enabled: true, func: 'addItem', mod: true },
+  'ac': { enabled: true, func: 'addCoins', mod: true },
+  'rc': { enabled: true, func: 'removeCoins', mod: true },
+  'tp': { enabled: true, func: 'teleportTo', mod: true },
+  'summon': { enabled: true, func: 'summonPenguin', mod: true },
+  'summonto': { enabled: true, func: 'summonPenguinTo', mod: true },
+  'kick': { enabled: true, func: 'kickPenguin', mod: true },
+  'mute': { enabled: true, func: 'mutePenguin', mod: true },
+  'ban': { enabled: true, func: 'banPenguin', mod: true },
+  'uo': { enabled: true, func: 'updateOutfit', mod: true },
+  'ng': { enabled: true, func: 'setNameglow', mod: false },
+  'nc': { enabled: true, func: 'setNamecolor', mod: false },
+  'bc': { enabled: true, func: 'setBubblecolor', mod: false },
+  'bt': { enabled: true, func: 'setBubbletext', mod: false },
+  'speed': { enabled: true, func: 'setSpeed', mod: false },
   'mood': { enabled: true, func: 'setMood', mod: false },
-  'bg': { enabled: true, func: 'setBubbleglow', len: 1, mod: false },
-  'mg': { enabled: true, func: 'setMoodglow', len: 1, mod: false },
-  'mc': { enabled: true, func: 'setMoodcolor', len: 1, mod: false },
-  'walls': { enabled: true, func: 'setWalls', len: 1, mod: false },
-  'size': { enabled: true, func: 'setSize', len: 1, mod: false }
+  'bg': { enabled: true, func: 'setBubbleglow', mod: false },
+  'mg': { enabled: true, func: 'setMoodglow', mod: false },
+  'mc': { enabled: true, func: 'setMoodcolor', mod: false },
+  'walls': { enabled: true, func: 'setWalls', mod: false },
+  'size': { enabled: true, func: 'setSize', mod: false }
 }
 
 /**
@@ -50,16 +50,12 @@ module.exports = class {
     const command = args.shift()
 
     if (commands[command] && commands[command].enabled && penguin.server.extensionManager.isExtensionEnabled('bot')) {
-      const { func, len, mod } = commands[command]
+      const { func, mod } = commands[command]
 
-      if (args.length === len) {
-        if (mod && penguin.moderator) {
-          this[func](len === 1 ? args[0] : args, penguin)
-        } else if (!mod) {
-          this[func](len === 1 ? args[0] : args, penguin)
-        }
-      } else if (command === 'mood') {
-        this[func](args.join(' '), penguin)
+      if (mod && penguin.moderator) {
+        this[func](args.length === 1 ? args[0] : args, penguin)
+      } else if (!mod) {
+        this[func](args.length === 1 ? args[0] : args, penguin)
       }
     }
   }
@@ -114,10 +110,14 @@ module.exports = class {
 
   /**
    * Handle the !find command
-   * @param {String} param
+   * @param {String|Array} param
    * @param {Penguin} penguin
    */
   static findPenguin(param, penguin) {
+    if (Array.isArray(param)) {
+      param = param.join(' ')
+    }
+
     const findObj = penguin.server.getPenguin(param)
 
     if (findObj && findObj.room) {
@@ -133,6 +133,10 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static joinRoom(roomId, penguin) {
+    if (isNaN(roomId)) {
+      return
+    }
+
     roomId = parseInt(roomId)
 
     if (roomId < 900) {
@@ -152,6 +156,10 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static async addItem(itemId, penguin) {
+    if (isNaN(itemId)) {
+      return
+    }
+
     itemId = parseInt(itemId)
 
     if (penguin.inventory.indexOf(itemId) === -1) {
@@ -171,6 +179,10 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static async addCoins(amount, penguin) {
+    if (isNaN(amount)) {
+      return
+    }
+
     await penguin.addCoins(parseInt(amount))
     penguin.sendXt('zo', penguin.coins, '', 0, 0, 0)
   }
@@ -181,16 +193,24 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static async removeCoins(amount, penguin) {
+    if (isNaN(amount)) {
+      return
+    }
+
     await penguin.removeCoins(parseInt(amount))
     penguin.sendXt('zo', penguin.coins, '', 0, 0, 0)
   }
 
   /**
    * Handle the !tp command
-   * @param {String} param
+   * @param {String|Array} param
    * @param {Penguin} penguin
    */
   static teleportTo(param, penguin) {
+    if (Array.isArray(param)) {
+      param = param.join(' ')
+    }
+
     const findObj = penguin.server.getPenguin(param)
 
     if (findObj && findObj.room && !findObj.isRoomFull(findObj.room.id)) {
@@ -201,10 +221,14 @@ module.exports = class {
 
   /**
    * Handle the !summon command
-   * @param {String} param
+   * @param {String|Array} param
    * @param {Penguin} penguin
    */
   static summonPenguin(param, penguin) {
+    if (Array.isArray(param)) {
+      param = param.join(' ')
+    }
+
     const summonObj = penguin.server.getPenguin(param)
 
     if (summonObj && summonObj.room && !penguin.isRoomFull(penguin.room.id)) {
@@ -219,8 +243,17 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static summonPenguinTo(data, penguin) {
-    const [param, roomId] = data
-    const summonObj = penguin.server.getPenguin(param)
+    if (data.length < 2) {
+      return
+    }
+
+    const roomId = data.shift()
+
+    if (isNaN(roomId)) {
+      return
+    }
+
+    const summonObj = penguin.server.getPenguin(data.length > 1 ? data.join(' ') : data[0])
 
     if (summonObj && summonObj.room) {
       const room = penguin.getRoomById(roomId)
@@ -234,10 +267,14 @@ module.exports = class {
 
   /**
    * Handle the !kick command
-   * @param {String} param
+   * @param {String|Array} param
    * @param {Penguin} penguin
    */
   static kickPenguin(param, penguin) {
+    if (Array.isArray(param)) {
+      param = param.join(' ')
+    }
+
     const kickObj = penguin.server.getPenguin(param)
 
     if (kickObj && kickObj.room) {
@@ -247,10 +284,14 @@ module.exports = class {
 
   /**
    * Handle the !mute command
-   * @param {String} param
+   * @param {String|Array} param
    * @param {Penguin} penguin
    */
   static async mutePenguin(param, penguin) {
+    if (Array.isArray(param)) {
+      param = param.join(' ')
+    }
+
     const muteObj = penguin.server.getPenguin(param)
 
     if (muteObj && muteObj.room) {
@@ -261,10 +302,14 @@ module.exports = class {
 
   /**
    * Handle the !ban command
-   * @param {String} param
+   * @param {String|Array} param
    * @param {Penguin} penguin
    */
   static async banPenguin(param, penguin) {
+    if (Array.isArray(param)) {
+      param = param.join(' ')
+    }
+
     const banObj = penguin.server.getPenguin(param)
 
     if (banObj && banObj.room) {
@@ -280,6 +325,10 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static async updateOutfit(data, penguin) {
+    if (isNaN(data[1])) {
+      return
+    }
+
     const [type, itemId] = data
     const types = ['color', 'head', 'face', 'neck', 'body', 'hand', 'feet', 'flag', 'photo']
 
@@ -409,10 +458,14 @@ module.exports = class {
 
   /**
    * Handle the !mood command
-   * @param {String} mood
+   * @param {Array} mood
    * @param {Penguin} penguin
    */
   static async setMood(mood, penguin) {
+    if (Array.isArray(mood)) {
+      mood = mood.join(' ')
+    }
+
     if (!mood.match(/^[a-zA-Z0-9 .,!?]+$/) || mood.length > 255) {
       return
     }
