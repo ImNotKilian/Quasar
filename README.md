@@ -1,8 +1,12 @@
 # Quasar
 
-This is a new experimental AS2 Club Penguin emulator of mine. It's focused to be fast and scalable.
+This is a new experimental AS2 Club Penguin emulator of mine.
 
-For a mediaserver, click [here](https://solero.github.io/tutorial/legacy/windows#setup-media-server). After you did this, replace `/media/play/v2/client/igloo.swf` with [this one](https://solero.me/uploads/default/original/1X/ea48e66c4290fdff2bc6478264acd3dadf3ea844.swf).
+# Mediaserver fixes and additions
+
+- For a mediaserver, follow [this](https://solero.github.io/tutorial/legacy/windows#setup-media-server)
+- Replace `/media/play/v2/client/igloo.swf` with [igloo.swf](https://solero.me/uploads/default/original/1X/ea48e66c4290fdff2bc6478264acd3dadf3ea844.swf)
+- For `openglows`, put [openglows.swf](https://solero.me/uploads/default/original/1X/d6fce44a1a7a1cfa8fba2afbc81db5b102bdf138.swf) into `/media/play/v2/client` and edit `/media/play/v2/client/dependencies.json` by adding ```{id: 'openglows',title: 'openglows'}```
 
 # Running
 
