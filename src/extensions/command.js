@@ -393,7 +393,7 @@ module.exports = class {
 
     value = Math.abs(parseInt(value))
 
-    if (value > 4294967295) {
+    if (value > 100) {
       return
     }
 
@@ -531,7 +531,7 @@ module.exports = class {
 
     value = Math.abs(parseInt(value))
 
-    if (value > 4294967295) {
+    if (value > 100) {
       return
     }
 

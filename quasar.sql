@@ -25,7 +25,7 @@ CREATE TABLE `penguins` (
     `rank` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 CHECK (`rank` BETWEEN 1 AND 5),
     `nameglow` VARCHAR(8) NOT NULL,
     `namecolor` VARCHAR(8) NOT NULL,
-    `speed` INT(10) UNSIGNED NOT NULL DEFAULT 4,
+    `speed` TINYINT(2) UNSIGNED NOT NULL DEFAULT 4 CHECK (`speed` BETWEEN 0 AND 100),
     `walls` BOOLEAN NOT NULL DEFAULT 0 CHECK (`walls` BETWEEN 0 AND 1),
     `bubblecolor` VARCHAR(8) NOT NULL,
     `bubbletext` VARCHAR(8) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `penguins` (
     `bubbleglow` VARCHAR(8) NOT NULL,
     `moodglow` VARCHAR(8) NOT NULL DEFAULT '0x0000FF',
     `moodcolor` VARCHAR(8) NOT NULL DEFAULT '0xFFFFFF',
-    `size` INT(2) UNSIGNED NOT NULL DEFAULT 100,
+    `size` TINYINT(2) UNSIGNED NOT NULL DEFAULT 100 CHECK (`size` BETWEEN 0 AND 100),
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
