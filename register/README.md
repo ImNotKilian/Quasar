@@ -1,9 +1,3 @@
 # Quasar-Register
 
-Quasar includes a simple register. This register hasn't been tested for production environment, but it does the job.
-
-# Running
-
-```
-npm start
-```
+Quasar includes a simple register. To use it, please edit the config in the php file.
