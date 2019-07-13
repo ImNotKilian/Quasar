@@ -42,28 +42,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     die();
   } else {
     try {
-      $strUsername = $_POST['username'];
-      $strPassword = $_POST['password'];
-      $intColor = (int)$_POST['color'];
-
-      $db = new PDO('mysql:host='.$config->host.';dbname='.$config->database, $config->username, $config->password);
+      $db = new PDO('mysql:host='.$config->host.';dbname='.$config->database.';charset=utf8mb4', $config->username, $config->password);
       $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
       $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
       $usernameExists = $db->prepare('SELECT username FROM penguins WHERE username = :username');
-      $usernameExists->bindValue(':username', $strUsername);
-      $usernameExists->execute();
+      $usernameExists->execute(['username' => $_POST['username']]);
       $usernameExists->closeCursor();
 
       if ($usernameExists->rowCount() === 0) {
-        $strHash = getLoginHash(strtoupper(hash('md5', $strPassword)), $config->loginKey);
+        $strHash = getLoginHash(strtoupper(hash('md5', $_POST['password'])), $config->loginKey);
 
         $insertPenguin = $db->prepare('INSERT INTO penguins (username, password, color) VALUES (:username, :password, :color)');
-        $insertPenguin->bindValue(':username', $strUsername);
-        $insertPenguin->bindValue(':password', $strHash);
-        $insertPenguin->bindValue(':color', $intColor);
-        $insertPenguin->execute();
+        $insertPenguin->execute(['username' => $_POST['username'], 'password' => $strHash, 'color' => $_POST['color']]);
         $insertPenguin->closeCursor();
 
         echo '<script>Swal.fire("Registered", "Your penguin is registered.", "success")</script>';
