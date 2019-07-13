@@ -30,8 +30,8 @@ const validateServerConfig = () => {
   if (isNaN(config.LOGIN.PORT)) throw new Error('Invalid port for login')
   if (isNaN(config.WORLD.PORT)) throw new Error('Invalid port for world')
 
-  if (config.LOGIN.PORT <= 1023) throw new Error('Invalid port range for login')
-  if (config.WORLD.PORT <= 1023) throw new Error('Invalid port range for world')
+  if (config.LOGIN.PORT < 1024) throw new Error('Invalid port range for login')
+  if (config.WORLD.PORT < 1024) throw new Error('Invalid port range for world')
 
   if (config.LOGIN.PORT === config.WORLD.PORT) throw new Error('Invalid port duplication')
 
