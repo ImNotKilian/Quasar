@@ -413,7 +413,7 @@ module.exports = class {
    * @param {Penguin} penguin
    */
   static async setMood(mood, penguin) {
-    if (!mood.match(/^[a-zA-Z0-9 .,!?]+$/) || mood.length > 65535) {
+    if (!mood.match(/^[a-zA-Z0-9 .,!?]+$/) || mood.length > 255) {
       return
     }
 

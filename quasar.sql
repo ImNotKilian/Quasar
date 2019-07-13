@@ -29,7 +29,7 @@ CREATE TABLE `penguins` (
     `walls` BOOLEAN NOT NULL DEFAULT 0 CHECK (`walls` BETWEEN 0 AND 1),
     `bubblecolor` VARCHAR(8) NOT NULL,
     `bubbletext` VARCHAR(8) NOT NULL,
-    `mood` TEXT NOT NULL DEFAULT 'Welcome to Quasar.',
+    `mood` TINYTEXT NOT NULL DEFAULT 'Welcome to Quasar.',
     `bubbleglow` VARCHAR(8) NOT NULL,
     `moodglow` VARCHAR(8) NOT NULL DEFAULT '0x0000FF',
     `moodcolor` VARCHAR(8) NOT NULL DEFAULT '0xFFFFFF',
