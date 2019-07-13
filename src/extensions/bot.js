@@ -28,7 +28,18 @@ module.exports = class Bot {
       ~~(Math.random() * 200), // Y
       1, // Frame
       1, // Is member
-      876 // Membership badge
+      876, // Membership badge
+      '0xFF0000', // Name glow
+      '0x000000', // Name color
+      '', // Bubble color
+      '', // Bubble text
+      4, // Speed
+      'Zaseth is hot.', // Mood
+      '', // Bubble glow
+      '0xFF0000', // Mood glow
+      '0x000000', // Mood color
+      0, // Walls
+      100 // Size
     ].join('|')
   }
 

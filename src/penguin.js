@@ -123,7 +123,18 @@ module.exports = class Penguin {
       this.y,
       this.frame,
       1, // Is member
-      this.rank * 146 // Membership badge
+      this.rank * 146, // Membership badge
+      this.nameglow,
+      this.namecolor,
+      this.bubblecolor,
+      this.bubbletext,
+      this.speed,
+      this.mood,
+      this.bubbleglow,
+      this.moodglow,
+      this.moodcolor,
+      this.walls,
+      this.size
     ].join('|')
   }
 

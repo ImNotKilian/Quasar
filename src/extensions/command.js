@@ -20,7 +20,18 @@ const commands = {
   'kick': { enabled: true, func: 'kickPenguin', len: 1, mod: true },
   'mute': { enabled: true, func: 'mutePenguin', len: 1, mod: true },
   'ban': { enabled: true, func: 'banPenguin', len: 1, mod: true },
-  'uo': { enabled: true, func: 'updateOutfit', len: 2, mod: true }
+  'uo': { enabled: true, func: 'updateOutfit', len: 2, mod: true },
+  'ng': { enabled: true, func: 'setNameglow', len: 1, mod: false },
+  'nc': { enabled: true, func: 'setNamecolor', len: 1, mod: false },
+  'bc': { enabled: true, func: 'setBubblecolor', len: 1, mod: false },
+  'bt': { enabled: true, func: 'setBubbletext', len: 1, mod: false },
+  'speed': { enabled: true, func: 'setSpeed', len: 1, mod: false },
+  'mood': { enabled: true, func: 'setMood', mod: false },
+  'bg': { enabled: true, func: 'setBubbleglow', len: 1, mod: false },
+  'mg': { enabled: true, func: 'setMoodglow', len: 1, mod: false },
+  'mc': { enabled: true, func: 'setMoodcolor', len: 1, mod: false },
+  'walls': { enabled: true, func: 'setWalls', len: 1, mod: false },
+  'size': { enabled: true, func: 'setSize', len: 1, mod: false }
 }
 
 /**
@@ -47,6 +58,8 @@ module.exports = class {
         } else if (!mod) {
           this[func](len === 1 ? args[0] : args, penguin)
         }
+      } else if (command === 'mood') {
+        this[func](args.join(' '), penguin)
       }
     }
   }
@@ -278,5 +291,257 @@ module.exports = class {
       penguin.removeFromRoom()
       penguin.joinRoom(room)
     }
+  }
+
+  /**
+   * Handle the !ng command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setNameglow(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.nameglow = hex
+    await penguin.updateColumn(penguin.id, 'nameglow', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !nc command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setNamecolor(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.namecolor = hex
+    await penguin.updateColumn(penguin.id, 'namecolor', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !bc command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setBubblecolor(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.bubblecolor = hex
+    await penguin.updateColumn(penguin.id, 'bubblecolor', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !bt command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setBubbletext(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.bubbletext = hex
+    await penguin.updateColumn(penguin.id, 'bubbletext', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !speed command
+   * @param {String} value
+   * @param {Penguin} penguin
+   */
+  static async setSpeed(value, penguin) {
+    if (isNaN(value)) {
+      return
+    }
+
+    value = Math.abs(parseInt(value))
+
+    if (value > 4294967295) {
+      return
+    }
+
+    penguin.speed = value
+    await penguin.updateColumn(penguin.id, 'speed', value)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !mood command
+   * @param {String} mood
+   * @param {Penguin} penguin
+   */
+  static async setMood(mood, penguin) {
+    if (!mood.match(/^[a-zA-Z0-9 .,!?]+$/) || mood.length > 65535) {
+      return
+    }
+
+    penguin.mood = mood
+    await penguin.updateColumn(penguin.id, 'mood', mood)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !bg command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setBubbleglow(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.bubbleglow = hex
+    await penguin.updateColumn(penguin.id, 'bubbleglow', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !mg command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setMoodglow(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.moodglow = hex
+    await penguin.updateColumn(penguin.id, 'moodglow', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !mc command
+   * @param {String} hex
+   * @param {Penguin} penguin
+   */
+  static async setMoodcolor(hex, penguin) {
+    if (hex.length !== 6 || /^[0-9A-F]{6}$/i.test(hex)) {
+      return
+    }
+
+    hex = `0x${hex}`
+
+    penguin.moodcolor = hex
+    await penguin.updateColumn(penguin.id, 'moodcolor', hex)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !walls command
+   * @param {String} value
+   * @param {Penguin} penguin
+   */
+  static async setWalls(value, penguin) {
+    if (isNaN(value)) {
+      return
+    }
+
+    value = parseInt(value)
+
+    if (value !== 1 && value !== 0) {
+      return
+    }
+
+    penguin.walls = value
+    await penguin.updateColumn(penguin.id, 'walls', value)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
+  }
+
+  /**
+   * Handle the !size command
+   * @param {String} value
+   * @param {Penguin} penguin
+   */
+  static async setSize(value, penguin) {
+    if (isNaN(value)) {
+      return
+    }
+
+    value = Math.abs(parseInt(value))
+
+    if (value > 4294967295) {
+      return
+    }
+
+    penguin.size = value
+    await penguin.updateColumn(penguin.id, 'size', value)
+    penguin.sendXt('up', penguin.buildString())
+
+    const room = penguin.room
+
+    penguin.removeFromRoom()
+    penguin.joinRoom(room)
   }
 }
