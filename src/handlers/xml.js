@@ -67,7 +67,7 @@ module.exports = {
         return penguin.sendError(603, true)
       }
 
-      const loginkey = await randomBytes(15).toString('hex')
+      const loginkey = randomBytes(15).toString('hex')
 
       await penguin.updateColumn(username, 'loginkey', loginkey)
       penguin.sendXt('l', result.id, loginkey, '', '100,5')
@@ -76,7 +76,7 @@ module.exports = {
         return penguin.server.removePenguin(penguin)
       }
 
-      let hash = await createHash('md5').update(result.loginkey + config.KEY).digest('hex')
+      let hash = createHash('md5').update(result.loginkey + config.KEY).digest('hex')
       hash = hash.substring(16) + hash.substring(0, 16) + result.loginkey
 
       if (password !== hash) {
