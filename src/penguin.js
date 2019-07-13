@@ -33,6 +33,8 @@ module.exports = class Penguin {
    * @param {Object} result
    */
   async setPenguin(result) {
+    await this.updateColumn(result.username, 'loginkey', '')
+
     this.server.penguins[result.id] = this
     this.server.idsByUsername[result.id] = result.username
     this.server.usernamesById[result.username.toLowerCase()] = result.id
