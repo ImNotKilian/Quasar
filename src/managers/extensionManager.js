@@ -20,13 +20,10 @@ module.exports = class ExtensionManager {
    * Load the extensions
    * @param {Function} callback
    */
-  async loadExtensions(callback) {
+  loadExtensions(callback) {
     const dir = `${process.cwd()}\\src\\extensions\\`
 
-    try {
-      const readdirAsync = require('util').promisify(require('fs').readdir)
-      const extensions = await readdirAsync(dir)
-
+    require('util').promisify(require('fs').readdir)(dir).then((extensions) => {
       for (let i = 0; i < extensions.length; i++) {
         const extension = extensions[i]
         const file = extension.split('.')[0]
@@ -35,12 +32,12 @@ module.exports = class ExtensionManager {
           this.extensions[file] = require(`${dir}${extension}`)
         }
       }
-    } catch (err) {
+
+      callback(Object.keys(this.extensions).length)
+    }).catch((err) => {
       logger.error(`An error has occurred whilst reading the extensions: ${err.message}`)
       process.kill(process.pid)
-    } finally {
-      callback(Object.keys(this.extensions).length)
-    }
+    })
   }
 
   /**

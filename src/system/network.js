@@ -109,26 +109,22 @@ module.exports = class Network {
    * Loads the handlers
    * @param {Function} callback
    */
-  static async loadHandlers(callback) {
+  static loadHandlers(callback) {
     const dir = `${process.cwd()}\\src\\handlers\\`
-    const extDir = `${process.cwd()}\\src\\extensions\\`
 
-    try {
-      if (serverType === 'LOGIN') {
-        classHandlers['xml'] = require(`${dir}xml.js`)
-      } else {
-        const readdirAsync = require('util').promisify(require('fs').readdir)
-        const handlers = await readdirAsync(dir)
-
+    if (serverType === 'LOGIN') {
+      classHandlers['xml'] = require(`${dir}xml.js`)
+    } else {
+      require('util').promisify(require('fs').readdir)(dir).then((handlers) => {
         for (let i = 0; i < handlers.length; i++) {
           classHandlers[handlers[i].split('.')[0]] = require(`${dir}${handlers[i]}`)
         }
-      }
-    } catch (err) {
-      logger.error(`An error has occurred whilst reading the handlers: ${err.message}`)
-      process.kill(process.pid)
-    } finally {
-      callback(Object.keys(classHandlers).length)
+
+        callback(Object.keys(classHandlers).length)
+      }).catch((err) => {
+        logger.error(`An error has occurred whilst reading the handlers: ${err.message}`)
+        process.kill(process.pid)
+      })
     }
   }
 
