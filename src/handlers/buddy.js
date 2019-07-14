@@ -63,12 +63,12 @@ module.exports = {
         try {
           await penguin.server.database.knex('buddy').insert({ id: penguin.id, buddyId, buddyUsername })
           await penguin.server.database.knex('buddy').insert({ id: buddyId, buddyId: penguin.id, buddyUsername: penguin.username })
-        } catch (err) {
-          penguin.disconnect()
-        } finally {
+
           buddyObj.sendXt('ba', penguin.id, penguin.username)
 
           penguin.requests.splice(idx, 1)
+        } catch (err) {
+          penguin.disconnect()
         }
       }
     }
