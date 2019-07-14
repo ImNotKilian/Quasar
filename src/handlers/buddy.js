@@ -45,7 +45,7 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
-    if (Object.keys(penguin.buddies).length >= 500) {
+    if (Object.keys(penguin.buddies).length >= 100) {
       return penguin.sendError(901)
     }
 
@@ -115,14 +115,14 @@ module.exports = {
 
     const buddyId = parseInt(data[0])
 
-    if (Object.keys(penguin.buddies).length >= 500) {
+    if (Object.keys(penguin.buddies).length >= 100) {
       return penguin.sendError(901)
     }
 
     const buddyObj = penguin.server.getPenguinById(buddyId)
 
     if (buddyObj) {
-      if (Object.keys(buddyObj.buddies).length < 500) {
+      if (Object.keys(buddyObj.buddies).length < 100) {
         if (buddyObj.requests.indexOf(penguin.id) === -1) {
           buddyObj.requests.push(penguin.id)
           buddyObj.sendXt('br', penguin.id, penguin.username)
