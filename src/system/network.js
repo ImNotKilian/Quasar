@@ -114,6 +114,8 @@ module.exports = class Network {
 
     if (serverType === 'LOGIN') {
       classHandlers['xml'] = require(`${dir}xml.js`)
+
+      callback(1)
     } else {
       require('util').promisify(require('fs').readdir)(dir).then((handlers) => {
         for (let i = 0; i < handlers.length; i++) {
