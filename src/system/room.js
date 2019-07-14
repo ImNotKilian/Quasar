@@ -31,9 +31,9 @@ module.exports = class Room {
     penguin.y = parseInt(y) || ~~(Math.random() * 200)
 
     this.penguins[penguin.id] = penguin
-
     this.sendXt('ap', penguin.buildString())
 
+    // An igloo
     if (this.id > 1000) {
       penguin.sendXt('jp', this.id)
     }
@@ -54,9 +54,7 @@ module.exports = class Room {
     let str = ''
 
     for (const id in this.penguins) {
-      const penguin = this.penguins[id]
-
-      str += `%${penguin.buildString()}`
+      str += `%${this.penguins[id].buildString()}`
     }
 
     return str.substr(1)
@@ -70,9 +68,7 @@ module.exports = class Room {
     logger.outgoing(data)
 
     for (const id in this.penguins) {
-      const penguin = this.penguins[id]
-
-      penguin.send(data, false)
+      this.penguins[id].send(data, false)
     }
   }
 
