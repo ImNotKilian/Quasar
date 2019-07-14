@@ -98,6 +98,8 @@ module.exports = class Server {
   removePenguin(penguin) {
     if (this.penguins[penguin.id]) {
       delete this.penguins[penguin.id]
+
+      logger.info('A penguino disconnected')
     }
 
     if (this.idsByUsername[penguin.id]) {
@@ -110,8 +112,6 @@ module.exports = class Server {
 
     penguin.socket.end()
     penguin.socket.destroy()
-
-    logger.info('A penguino disconnected')
   }
 
   /**
