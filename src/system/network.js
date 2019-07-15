@@ -35,6 +35,7 @@ const xtHandlers = {
 
     'i#gi': { klass: 'inventory', func: 'handleGetInventory' },
     'i#ai': { klass: 'inventory', func: 'handleAddItem' },
+    'i#qpa': { klass: 'inventory', func: 'handleQueryPlayerAwards' },
     'u#gp': { klass: 'inventory', func: 'handleGetPenguin' },
     's#upc': { klass: 'inventory', func: 'handleUpdateClothing' },
     's#uph': { klass: 'inventory', func: 'handleUpdateClothing' },

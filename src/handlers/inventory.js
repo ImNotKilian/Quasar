@@ -123,5 +123,45 @@ module.exports = {
     await penguin.server.database.knex('inventory').insert({ id: penguin.id, itemId })
 
     penguin.sendXt('ai', itemId, penguin.coins)
+  },
+  /**
+   * Retrieve player awards
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleQueryPlayerAwards: async (data, penguin) => {
+    if (data.length !== 1 || isNaN(data[0])) {
+      return penguin.disconnect()
+    }
+
+    const id = parseInt(data[0])
+    const penguinObj = penguin.server.getPenguinById(id)
+
+    if (penguinObj) {
+      let awardStr = ''
+
+      for (let i = 0; i < penguinObj.inventory.length; i++) {
+        const item = penguinObj.inventory[i]
+
+        if (items[item] && items[item].type === 10) {
+          awardStr += `${item}|${Date.now() / 1000 | 0}|1%`
+        }
+      }
+
+      penguin.sendXt('qpa', awardStr.slice(0, -1))
+    } else {
+      const inventory = await this.server.database.knex('inventory').pluck('itemId').where({ id })
+      let awardStr = ''
+
+      for (let i = 0; i < inventory.length; i++) {
+        const item = inventory[i]
+
+        if (items[item] && items[item].type === 10) {
+          awardStr += `${item}|${Date.now() / 1000 | 0}|1%`
+        }
+      }
+
+      penguin.sendXt('qpa', awardStr.slice(0, -1))
+    }
   }
 }
