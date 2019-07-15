@@ -144,7 +144,7 @@ module.exports = {
         const item = penguinObj.inventory[i]
 
         if (items[item] && items[item].type === 10) {
-          awardStr += `${item}|${Date.now() / 1000 | 0}|1%`
+          awardStr += `${item}|`
         }
       }
 
@@ -157,7 +157,7 @@ module.exports = {
         const item = inventory[i]
 
         if (items[item] && items[item].type === 10) {
-          awardStr += `${item}|${Date.now() / 1000 | 0}|1%`
+          awardStr += `${item}|`
         }
       }
 
