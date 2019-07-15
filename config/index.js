@@ -11,9 +11,10 @@ module.exports = {
   EXTENSIONS_DISABLED: [],
 
   BUCKET: {
-    MAX_PACKETS_ALLOWED: 50,
-    CONSUME_RATE: 1,
-    FILL_RATE: 5
+    ENABLED: true,
+    MAX_PACKETS_ALLOWED: 50, // When the bucket fills
+    CONSUME_RATE: 1, // The rate of consumption
+    FILL_RATE: 5 // Amount of seconds the bucket will fill with consume rate
   },
 
   REGISTER: { HOST: '127.0.0.1', PORT: 1337 },

@@ -54,6 +54,10 @@ module.exports = class Server {
      * Start a new server
      */
     network.loadHandlers((len) => {
+      if (config.BUCKET.ENABLED) {
+        logger.info('Bucket extension is enabled')
+      }
+
       if (serverType === 'WORLD') {
         this.extensionManager = new (require('./managers/extensionManager'))
 
@@ -88,17 +92,23 @@ module.exports = class Server {
 
       const penguin = new Penguin(this, socket)
 
-      this.bucket[socket] = { packets: config.BUCKET.MAX_PACKETS_ALLOWED, time: Date.now() / 1000 | 0 }
+      if (config.BUCKET.ENABLED) {
+        this.bucket[socket] = { packets: config.BUCKET.MAX_PACKETS_ALLOWED, time: Date.now() / 1000 | 0 }
+      }
 
       logger.info('A penguino connected')
 
       socket.on('data', (data) => {
-        if (this.getRemainingPackets(penguin.socket) >= config.BUCKET.CONSUME_RATE) {
-          this.bucket[penguin.socket].packets -= config.BUCKET.CONSUME_RATE
-
+        if (!config.BUCKET.ENABLED) {
           network.handleData(data, penguin)
         } else {
-          penguin.disconnect()
+          if (this.getRemainingPackets(penguin.socket) >= config.BUCKET.CONSUME_RATE) {
+            this.bucket[penguin.socket].packets -= config.BUCKET.CONSUME_RATE
+
+            network.handleData(data, penguin)
+          } else {
+            penguin.disconnect()
+          }
         }
       })
       socket.on('timeout', () => penguin.sendError(2, true))
