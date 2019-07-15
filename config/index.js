@@ -10,6 +10,12 @@ module.exports = {
   EXTENSIONS_ENABLED: ['command', 'bot'],
   EXTENSIONS_DISABLED: [],
 
+  BUCKET: {
+    MAX_PACKETS_ALLOWED: 50,
+    CONSUME_RATE: 1,
+    FILL_RATE: 5
+  },
+
   REGISTER: { HOST: '127.0.0.1', PORT: 1337 },
 
   LOGIN: { HOST: '127.0.0.1', PORT: 6112 },

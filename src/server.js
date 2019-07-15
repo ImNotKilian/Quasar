@@ -29,6 +29,11 @@ module.exports = class Server {
      */
     this.usernamesById = {}
     /**
+     * Leaky bucket
+     * @type {Object}
+     */
+    this.bucket = {}
+    /**
      * The config for the current server
      * @type {Object}
      */
@@ -82,9 +87,20 @@ module.exports = class Server {
       socket.setEncoding('utf8')
 
       const penguin = new Penguin(this, socket)
+
+      this.bucket[socket] = { packets: config.BUCKET.MAX_PACKETS_ALLOWED, time: Date.now() / 1000 | 0 }
+
       logger.info('A penguino connected')
 
-      socket.on('data', (data) => network.handleData(data, penguin))
+      socket.on('data', (data) => {
+        if (this.getRemainingPackets(penguin.socket) >= config.BUCKET.CONSUME_RATE) {
+          this.bucket[penguin.socket].packets -= config.BUCKET.CONSUME_RATE
+
+          network.handleData(data, penguin)
+        } else {
+          penguin.disconnect()
+        }
+      })
       socket.on('timeout', () => penguin.sendError(2, true))
       socket.on('close', () => penguin.disconnect())
       socket.on('error', () => penguin.disconnect())
@@ -102,16 +118,31 @@ module.exports = class Server {
       logger.info('A penguino disconnected')
     }
 
-    if (this.idsByUsername[penguin.id]) {
-      delete this.idsByUsername[penguin.id]
-    }
-
-    if (this.usernamesById[penguin.username]) {
-      delete this.usernamesById[penguin.username]
-    }
+    if (this.idsByUsername[penguin.id]) delete this.idsByUsername[penguin.id]
+    if (this.usernamesById[penguin.username]) delete this.usernamesById[penguin.username]
+    if (this.bucket[penguin.socket]) delete this.bucket[penguin.socket]
 
     penguin.socket.end()
     penguin.socket.destroy()
+  }
+
+  /**
+   * Retrieve how many packets the penguin can send
+   * @param {net.Socket} socket
+   * @returns {Number}
+   */
+  getRemainingPackets(socket) {
+    const time = Date.now() / 1000 | 0
+
+    if (this.bucket[socket] && this.bucket[socket].packets < config.BUCKET.MAX_PACKETS_ALLOWED) {
+      const interval = config.BUCKET.FILL_RATE * (time - this.bucket[socket].time)
+
+      this.bucket[socket].packets = Math.min(config.BUCKET.MAX_PACKETS_ALLOWED, this.bucket[socket].packets + interval)
+    }
+
+    this.bucket[socket].time = time
+
+    return this.bucket[socket].packets
   }
 
   /**
