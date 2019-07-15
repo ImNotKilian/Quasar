@@ -182,7 +182,8 @@ module.exports = {
     }
 
     if (!penguin.muted) {
-      if (message.charAt(0) === '!' && penguin.server.extensionManager.isExtensionEnabled('command')) {
+      // Command and bot extension must be enabled
+      if (message.charAt(0) === '!' && penguin.server.extensionManager.isExtensionEnabled('command') && penguin.server.extensionManager.isExtensionEnabled('bot')) {
         penguin.server.extensionManager.getExtension('command').handleCommand(message, penguin)
       } else {
         penguin.room.sendXt('sm', penguin.id, message)
