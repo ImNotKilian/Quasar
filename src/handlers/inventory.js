@@ -142,7 +142,7 @@ module.exports = {
 
       awards.length > 0 ? penguin.sendXt('qpa', awards.join('|')) : penguin.sendXt('qpa')
     } else {
-      const inventory = await this.server.database.knex('inventory').pluck('itemId').where({ id })
+      const inventory = await penguin.server.database.knex('inventory').pluck('itemId').where({ id })
       const awards = inventory.filter((item) => items[item] && items[item].type === 10)
 
       awards.length > 0 ? penguin.sendXt('qpa', awards.join('|')) : penguin.sendXt('qpa')
