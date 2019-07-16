@@ -54,24 +54,19 @@ module.exports = class Server {
      * Start a new server
      */
     network.loadHandlers((len) => {
-      if (config.BUCKET.ENABLED) {
-        logger.info('Bucket extension is enabled')
-      }
-
       if (serverType === 'WORLD') {
         this.extensionManager = new (require('./managers/extensionManager'))
 
-        this.extensionManager.loadExtensions((extLen) => {
+        this.extensionManager.loadExtensions((extLen, patchLen) => {
           logger.info(`Quasar has loaded ${len} handlers`)
           logger.info(`Quasar has loaded ${extLen} extensions`)
-
-          this.startServer()
+          logger.info(`Quasar has loaded ${patchLen} patched items`)
         })
       } else {
         logger.info(`Quasar has loaded ${len} handlers`)
-
-        this.startServer()
       }
+
+      this.startServer()
     })
   }
 
