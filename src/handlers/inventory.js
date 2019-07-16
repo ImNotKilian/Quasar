@@ -154,6 +154,25 @@ module.exports = {
    * @param {Penguin} penguin
    */
   handleQueryPlayerPins: async (data, penguin) => {
-    // Todo
+    if (data.length !== 1 || isNaN(data[0])) {
+      return penguin.disconnect()
+    }
+
+    const id = parseInt(data[0])
+    const penguinObj = penguin.server.getPenguinById(id)
+    const time = Date.now() / 1000 | 0
+
+    // Todo: Pins have their own creation date and member/not, add them
+
+    if (penguinObj) {
+      const pins = penguinObj.inventory.filter((item) => items[item] && items[item].type === 8).map((pin) => `${pin}|${time}|0`)
+
+      pins.length > 0 ? penguin.sendXt('qpp', pins.join('%')) : penguin.sendXt('qpp')
+    } else {
+      const inventory = await penguin.server.database.knex('inventory').pluck('itemId').where({ id })
+      const pins = inventory.filter((item) => items[item] && items[item].type === 8).map((pin) => `${pin}|${time}|0`)
+
+      pins.length > 0 ? penguin.sendXt('qpp', pins.join('%')) : penguin.sendXt('qpp')
+    }
   }
 }
