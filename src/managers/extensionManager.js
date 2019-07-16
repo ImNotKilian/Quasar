@@ -50,7 +50,7 @@ module.exports = class ExtensionManager {
   }
 
   /**
-   * Retrieve whether an extension is enabled or not
+   * Retrieve whether an extension is enabled or not from the config
    * @param {String} extension
    * @returns {Boolean}
    */
