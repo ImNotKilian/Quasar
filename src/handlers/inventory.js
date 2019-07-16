@@ -138,30 +138,22 @@ module.exports = {
     const penguinObj = penguin.server.getPenguinById(id)
 
     if (penguinObj) {
-      let awardStr = ''
+      const awards = penguinObj.inventory.filter((item) => items[item] && items[item].type === 10)
 
-      for (let i = 0; i < penguinObj.inventory.length; i++) {
-        const item = penguinObj.inventory[i]
-
-        if (items[item] && items[item].type === 10) {
-          awardStr += `${item}|`
-        }
-      }
-
-      penguin.sendXt('qpa', awardStr.slice(0, -1))
+      awards.length > 0 ? penguin.sendXt('qpa', awards.join('|')) : penguin.sendXt('qpa')
     } else {
       const inventory = await this.server.database.knex('inventory').pluck('itemId').where({ id })
-      let awardStr = ''
+      const awards = inventory.filter((item) => items[item] && items[item].type === 10)
 
-      for (let i = 0; i < inventory.length; i++) {
-        const item = inventory[i]
-
-        if (items[item] && items[item].type === 10) {
-          awardStr += `${item}|`
-        }
-      }
-
-      penguin.sendXt('qpa', awardStr.slice(0, -1))
+      awards.length > 0 ? penguin.sendXt('qpa', awards.join('|')) : penguin.sendXt('qpa')
     }
+  },
+  /**
+   * Retrieve player pins
+   * @param {Array} data
+   * @param {Penguin} penguin
+   */
+  handleQueryPlayerPins: async (data, penguin) => {
+    // Todo
   }
 }
