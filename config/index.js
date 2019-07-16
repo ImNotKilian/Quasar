@@ -17,11 +17,7 @@ module.exports = {
     FILL_RATE: 5 // Amount of seconds the bucket will fill with consume rate
   },
 
-  REGISTER: { HOST: '127.0.0.1', PORT: 1337 },
-
   LOGIN: { HOST: '127.0.0.1', PORT: 6112 },
-
   WORLD: { HOST: '127.0.0.1', PORT: 9875, MAX: 200 },
-
   DATABASE: { host: '127.0.0.1', user: 'root', password: '', database: 'quasar' }
 }
