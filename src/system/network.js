@@ -176,7 +176,7 @@ module.exports = class Network {
           type = xt.shift()
           handler = xt.shift()
 
-          xt.shift()
+          xt.shift() // -1
         } else {
           throw new Error('Incorrect data')
         }
@@ -194,6 +194,7 @@ module.exports = class Network {
 
           const { klass, func } = xtHandlers[type][handler]
 
+          // Send the updated clothing type too
           if (func.toString() === 'handleUpdateClothing') {
             xt.push(handler.split('#')[1])
           }
