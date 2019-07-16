@@ -31,7 +31,7 @@ module.exports = {
       }
     }
 
-    penguin.sendXt('gb', buddyStr.slice(0, -1))
+    buddyStr.length > 0 ? penguin.sendXt('gb', buddyStr.slice(0, -1)) : penguin.sendXt('gb')
   },
   /**
    * Add a buddy

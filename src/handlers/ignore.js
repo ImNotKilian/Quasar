@@ -22,7 +22,7 @@ module.exports = {
       ignoreStr += `${ignoreId}|${ignoreUsername}%`
     }
 
-    penguin.sendXt('gn', ignoreStr.slice(0, -1))
+    ignoreStr.length > 0 ? penguin.sendXt('gn', ignoreStr.slice(0, -1)) : penguin.sendXt('gn')
   },
   /**
    * Add an ignore

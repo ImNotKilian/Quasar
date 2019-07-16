@@ -43,7 +43,7 @@ module.exports = {
       mailArr.push(mailDetails.join('|'))
     }
 
-    penguin.sendXt('mg', mailArr.reverse().join('%'))
+    mailArr.length > 0 ? penguin.sendXt('mg', mailArr.reverse().join('%')) : penguin.sendXt('mg')
   },
   /**
    * Send mail

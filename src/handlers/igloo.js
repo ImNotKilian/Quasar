@@ -25,7 +25,7 @@ module.exports = {
     }
 
     // Avoid undefined in open igloo list
-    iglooStr.length > 1 ? penguin.sendXt('gr', iglooStr.substr(1)) : penguin.sendXt('gr')
+    iglooStr.length > 0 ? penguin.sendXt('gr', iglooStr.substr(1)) : penguin.sendXt('gr')
   },
   /**
    * Retrieve an igloo
