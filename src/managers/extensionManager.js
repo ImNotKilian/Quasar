@@ -26,9 +26,9 @@ module.exports = class ExtensionManager {
     require('util').promisify(require('fs').readdir)(dir).then((extensions) => {
       for (let i = 0; i < extensions.length; i++) {
         const extension = extensions[i]
-        const file = extension.split('.')[0]
+        const [file, fileType] = extension.split('.')
 
-        if (config.EXTENSIONS_ENABLED.indexOf(file) > -1) {
+        if (this.isExtensionEnabled(file) && fileType === 'js') {
           this.extensions[file] = require(`${dir}${extension}`)
         }
       }

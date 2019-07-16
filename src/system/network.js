@@ -119,7 +119,12 @@ module.exports = class Network {
     } else {
       require('util').promisify(require('fs').readdir)(dir).then((handlers) => {
         for (let i = 0; i < handlers.length; i++) {
-          classHandlers[handlers[i].split('.')[0]] = require(`${dir}${handlers[i]}`)
+          const handler = handlers[i]
+          const [file, fileType] = handler.split('.')
+
+          if (fileType === 'js') {
+            classHandlers[file] = require(`${dir}${handler}`)
+          }
         }
 
         callback(Object.keys(classHandlers).length)
