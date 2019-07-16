@@ -10,6 +10,8 @@ module.exports = {
   EXTENSIONS_ENABLED: ['command', 'bot'],
   EXTENSIONS_DISABLED: [],
 
+  PATCHED_ITEMS: [],
+
   BUCKET: {
     ENABLED: true,
     MAX_PACKETS_ALLOWED: 50, // When the bucket fills

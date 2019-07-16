@@ -103,7 +103,7 @@ module.exports = {
     const itemId = parseInt(data[0])
     const itemCrumb = items[itemId]
 
-    if (!itemCrumb) {
+    if (!itemCrumb || penguin.server.extensionManager.isPatchedItem(itemId)) {
       return penguin.sendError(402)
     }
 

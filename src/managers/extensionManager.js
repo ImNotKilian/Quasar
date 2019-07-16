@@ -14,6 +14,11 @@ module.exports = class ExtensionManager {
      * @type {Object}
      */
     this.extensions = {}
+    /**
+     * Patched items array
+     * @type {Array}
+     */
+    this.patchedItems = config.PATCHED_ITEMS
   }
 
   /**
@@ -33,11 +38,20 @@ module.exports = class ExtensionManager {
         }
       }
 
-      callback(Object.keys(this.extensions).length)
+      callback(Object.keys(this.extensions).length, this.patchedItems.length)
     }).catch((err) => {
       logger.error(`An error has occurred whilst reading the extensions: ${err.message}`)
       process.kill(process.pid)
     })
+  }
+
+  /**
+   * Retrieve whether an item is patched or not
+   * @param {Number} itemId
+   * @returns {Boolean}
+   */
+  isPatchedItem(itemId) {
+    return this.patchedItems.indexOf(parseInt(itemId)) > -1
   }
 
   /**
