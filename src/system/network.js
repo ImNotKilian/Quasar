@@ -74,8 +74,6 @@ const xtHandlers = {
     'g#or': { klass: 'igloo', func: 'handleOpenIgloo' },
     'g#cr': { klass: 'igloo', func: 'handleCloseIgloo' },
 
-    'p#pg': { klass: 'puffle', func: 'getPufflesByPlayerId' },
-
     't#at': { klass: 'toy', func: 'handleAddToy' },
     't#rt': { klass: 'toy', func: 'handleRemoveToy' }
   },
