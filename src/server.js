@@ -92,12 +92,11 @@ module.exports = class Server {
       }
 
       const penguin = new Penguin(this, socket)
+      logger.info('A penguino connected')
 
       if (config.BUCKET.ENABLED) {
         this.bucket[socket] = { packets: config.BUCKET.MAX_PACKETS_ALLOWED, time: Date.now() / 1000 | 0 }
       }
-
-      logger.info('A penguino connected')
 
       socket.on('data', (data) => {
         if (!config.BUCKET.ENABLED) {
