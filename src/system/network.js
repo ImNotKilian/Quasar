@@ -112,12 +112,21 @@ module.exports = class Network {
   static loadHandlers(callback) {
     const dir = `${process.cwd()}\\src\\handlers\\`
 
-    if (serverType === 'LOGIN') {
-      classHandlers['xml'] = require(`${dir}xml.js`)
+    const { access, readdir } = require('fs')
 
-      callback(1)
+    if (serverType === 'LOGIN') {
+      access(`${dir}xml.js`, 0, (err) => {
+        if (err) {
+          logger.error('Quasar has detected no xml handler and will now be killed')
+          process.kill(process.pid)
+        } else {
+          classHandlers['xml'] = require(`${dir}xml.js`)
+
+          callback(1)
+        }
+      })
     } else {
-      require('util').promisify(require('fs').readdir)(dir).then((handlers) => {
+      require('util').promisify(readdir)(dir).then((handlers) => {
         for (let i = 0; i < handlers.length; i++) {
           const handler = handlers[i]
           const [file, fileType] = handler.split('.')
