@@ -113,13 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <form action="" method="POST"
                 class="form-inlin justify-content-center shadow-lg p-3 mb-5 bg-white rounded">
                 <div class="form-group">
-                  <input type="text" name="username" class="form-control" placeholder="Username" minlength="4"
-                    maxlength="12" required>
+                  <input type="text" name="username" class="form-control" placeholder="Username" minlength="4" maxlength="12" required>
                 </div>
 
                 <div class="form-group">
-                  <input type="password" name="password" class="form-control" placeholder="Password" minlength="4"
-                    maxlength="12" required>
+                  <input type="password" name="password" class="form-control" placeholder="Password" minlength="4" maxlength="12" required>
                 </div>
 
                 <div class="form-group">
