@@ -122,11 +122,9 @@ module.exports = {
     const buddyObj = penguin.server.getPenguinById(buddyId)
 
     if (buddyObj) {
-      if (Object.keys(buddyObj.buddies).length < 100) {
-        if (buddyObj.requests.indexOf(penguin.id) === -1) {
-          buddyObj.requests.push(penguin.id)
-          buddyObj.sendXt('br', penguin.id, penguin.username)
-        }
+      if (Object.keys(buddyObj.buddies).length < 100 && buddyObj.requests.indexOf(penguin.id) === -1) {
+        buddyObj.requests.push(penguin.id)
+        buddyObj.sendXt('br', penguin.id, penguin.username)
       }
     } else {
       penguin.disconnect()
