@@ -109,7 +109,7 @@ module.exports = class Penguin {
     return [
       this.id,
       this.username,
-      1, // Is approved
+      1, // Bitmask
       this.color,
       this.head,
       this.face,

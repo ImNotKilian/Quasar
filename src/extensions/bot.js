@@ -14,7 +14,7 @@ module.exports = class Bot {
     return [
       0, // Id
       'Bot', // Username
-      1, // Is approved
+      1, // Bitmask
       1, // Color
       122, // Head
       0, // Face
