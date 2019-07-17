@@ -86,20 +86,24 @@ module.exports = {
     const buddyId = parseInt(data[0])
 
     if (penguin.buddies[buddyId]) {
-      delete penguin.buddies[buddyId]
-      await penguin.server.database.knex('buddy').where('buddyId', buddyId).andWhere('id', penguin.id).del()
+      try {
+        delete penguin.buddies[buddyId]
+        await penguin.server.database.knex('buddy').where('buddyId', buddyId).andWhere('id', penguin.id).del()
 
-      const buddyObj = penguin.server.getPenguinById(buddyId)
+        const buddyObj = penguin.server.getPenguinById(buddyId)
 
-      if (buddyObj) {
-        if (buddyObj.buddies[penguin.id]) {
-          delete buddyObj.buddies[penguin.id]
+        if (buddyObj) {
+          if (buddyObj.buddies[penguin.id]) {
+            delete buddyObj.buddies[penguin.id]
+          }
+
+          await penguin.server.database.knex('buddy').where('buddyId', penguin.id).andWhere('id', buddyId).del()
+          buddyObj.sendXt('rb', penguin.id, penguin.username)
+        } else {
+          await penguin.server.database.knex('buddy').where('buddyId', penguin.id).andWhere('id', buddyId).del()
         }
-
-        await penguin.server.database.knex('buddy').where('buddyId', penguin.id).andWhere('id', buddyId).del()
-        buddyObj.sendXt('rb', penguin.id, penguin.username)
-      } else {
-        await penguin.server.database.knex('buddy').where('buddyId', penguin.id).andWhere('id', buddyId).del()
+      } catch (err) {
+        penguin.disconnect()
       }
     }
   },
