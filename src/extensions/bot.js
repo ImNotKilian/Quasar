@@ -38,7 +38,7 @@ module.exports = class Bot {
       '', // Bubble glow
       '0xFF0000', // Mood glow
       '0x000000', // Mood color
-      0, // Walls
+      0, // Walk on walls enabled
       100 // Size
     ].join('|')
   }
