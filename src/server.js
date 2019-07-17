@@ -49,14 +49,13 @@ module.exports = class Server {
      */
     if (serverType === 'WORLD') {
       this.roomManager = new (require('./managers/roomManager'))
+      this.extensionManager = new (require('./managers/extensionManager'))
     }
     /**
      * Start a new server
      */
     network.loadHandlers((len) => {
       if (serverType === 'WORLD') {
-        this.extensionManager = new (require('./managers/extensionManager'))
-
         this.extensionManager.loadExtensions((extLen, patchLen) => {
           logger.info(`Quasar has loaded ${len} handlers`)
           logger.info(`Quasar has loaded ${extLen} extensions`)
