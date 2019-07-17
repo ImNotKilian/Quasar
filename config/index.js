@@ -11,6 +11,7 @@ module.exports = {
   EXTENSIONS_DISABLED: [],
 
   PATCHED_ITEMS: [],
+  BANNED_IPS: [],
 
   BUCKET: {
     ENABLED: true,

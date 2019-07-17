@@ -19,6 +19,11 @@ module.exports = class ExtensionManager {
      * @type {Array}
      */
     this.patchedItems = config.PATCHED_ITEMS
+    /**
+     * Banned IPs array
+     * @type {Array}
+     */
+    this.bannedIPs = config.BANNED_IPS
   }
 
   /**
@@ -38,7 +43,7 @@ module.exports = class ExtensionManager {
         }
       }
 
-      callback(Object.keys(this.extensions).length, this.patchedItems.length)
+      callback(Object.keys(this.extensions).length, this.patchedItems.length, this.bannedIPs.length)
     }).catch((err) => {
       logger.error(`An error has occurred whilst reading the extensions: ${err.message}`)
       process.kill(process.pid)
@@ -52,6 +57,15 @@ module.exports = class ExtensionManager {
    */
   isPatchedItem(itemId) {
     return this.patchedItems.indexOf(parseInt(itemId)) > -1
+  }
+
+  /**
+   * Retrieve whether an IP is banned or not
+   * @param {String} IP
+   * @returns {Boolean}
+   */
+  isBannedIP(IP) {
+    return this.bannedIPs.indexOf(IP) > -1
   }
 
   /**

@@ -56,10 +56,11 @@ module.exports = class Server {
      */
     network.loadHandlers((len) => {
       if (serverType === 'WORLD') {
-        this.extensionManager.loadExtensions((extLen, patchLen) => {
+        this.extensionManager.loadExtensions((extLen, patchLen, bannedIPLen) => {
           logger.info(`Quasar has loaded ${len} handlers`)
           logger.info(`Quasar has loaded ${extLen} extensions`)
           logger.info(`Quasar has loaded ${patchLen} patched items`)
+          logger.info(`Quasar has loaded ${bannedIPLen} banned IPs`)
         })
       } else {
         logger.info(`Quasar has loaded ${len} handlers`)
@@ -83,6 +84,12 @@ module.exports = class Server {
     createServer((socket) => {
       socket.setTimeout(600000)
       socket.setEncoding('utf8')
+
+      if (serverType === 'WORLD' && this.extensionManager.isBannedIP(socket.remoteAddress.split(':').pop())) {
+        socket.end()
+        socket.destroy()
+        return
+      }
 
       const penguin = new Penguin(this, socket)
 
