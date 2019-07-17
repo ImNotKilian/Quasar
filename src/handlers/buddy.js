@@ -51,7 +51,7 @@ module.exports = {
 
     const idx = penguin.requests.indexOf(buddyId)
 
-    if (!penguin.ignored[buddyId] && !penguin.buddies[buddyId] && idx > -1) {
+    if (!penguin.buddies[buddyId] && idx > -1) {
       const buddyObj = penguin.server.getPenguinById(buddyId)
 
       if (buddyObj && !buddyObj.buddies[penguin.id]) {
