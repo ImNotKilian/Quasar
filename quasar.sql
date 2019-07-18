@@ -53,7 +53,12 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 INSERT INTO `inventory` VALUES (100, 1);
+INSERT INTO `inventory` VALUES (100, 801);
+INSERT INTO `inventory` VALUES (100, 550);
 INSERT INTO `inventory` VALUES (101, 1);
+INSERT INTO `inventory` VALUES (101, 801);
+INSERT INTO `inventory` VALUES (101, 550);
+UNLOCK TABLES;
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mail`;
