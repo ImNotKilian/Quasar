@@ -64,7 +64,6 @@ DROP TABLE IF EXISTS `stamps`;
 CREATE TABLE `stamps` (
     `id` INT(10) UNSIGNED NOT NULL COMMENT 'Penguin id',
     `stampId` SMALLINT(5) UNSIGNED NOT NULL,
-    `recent` BOOLEAN NOT NULL DEFAULT 1 CHECK (`recent` BETWEEN 0 AND 1),
     PRIMARY KEY (`id`, `stampId`),
     CONSTRAINT `stamps_ibfk_1` FOREIGN KEY (`id`) REFERENCES `penguins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
