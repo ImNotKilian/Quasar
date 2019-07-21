@@ -16,6 +16,11 @@ module.exports = class Room {
     for (const key in roomObj) {
       this[key] = roomObj[key]
     }
+    /**
+     * The penguins in the room
+     * @type {Object}
+     */
+    this.penguins = {}
   }
 
   /**
